@@ -52,3 +52,31 @@ did not  see the message for this assignment
 - Start on the Groq AI summary integration (Day 3 scope per plan but may start early).
 - Polish the UI — check mobile responsiveness, add proper error states.
 - Reach out to potential users for interviews.
+
+
+## Day 4 : 09-05-2026
+
+**Hours worked:** 6
+
+**What I did:**
+- Added `PRICING_DATA.md` compiling verified May 2026 pricing for the 6 core tools, fixing minor inaccuracies (e.g., updating Copilot to "Pro" and Windsurf Teams to $30) to ensure the engine relies on ground truth.
+- Integrated the Groq SDK (`lib/groq.ts`) to use `llama3-70b-8192` for generating concise, structured AI summaries of the audit. Built a graceful fallback mechanism if the API fails, and documented the prompt strategy in `PROMPTS.md`.
+- Built the lead capture flow (`components/LeadCaptureForm.tsx`) using a honeypot field for bot protection, and deployed a new API route (`/api/leads`) to persist submissions to Supabase.
+- Integrated Resend (`lib/email.ts`) to send plain-text transactional emails to leads. Added logic to dynamically flag high-savings audits (>$500/mo) for a manual Credex advisor follow-up.
+- Refactored the audit results page by splitting it into a Server Component (`app/audit/[id]/page.tsx`) to generate dynamic Open Graph metadata for viral link sharing, and a Client Component (`app/audit/[id]/client.tsx`) to render the interactive UI.
+- Authored `ARCHITECTURE.md` to document the pure-function rules of the audit engine and explain the directory structure, meeting the core assignment requirements.
+- Set up a GitHub Actions CI pipeline (`.github/workflows/ci.yml`) to automatically run linting and Vitest regression tests on every push.
+- Debugged a silent failure in the Supabase inserts by refactoring `supabase.ts` to accept `NEXT_PUBLIC_SUPABASE_ANON_KEY` as a fallback, and added explicit error logging to both the `/api/audit` and `/api/summary` routes.
+
+**What I learned:**
+- Splitting pages into a Server Component for metadata and a Client Component for interactivity is the cleanest way in Next.js App Router to handle both SEO/OG tags and local browser state (`sessionStorage`).
+- If an API key is missing or invalid, libraries like Resend and Supabase often fail without crashing the app, making robust error logging critical during development.
+
+**Blockers / what I'm stuck on:**
+- Resend's free tier only allows sending emails from `onboarding@resend.dev` to the verified testing email address. It does not work in production on a `.vercel.app` domain without verifying a custom domain, so the email flow will only work for testing purposes right now.
+
+**Plan for tomorrow:**
+- Add all production environment variables (Supabase, Groq, Resend) to the existing Vercel deployment.
+- Test the full end-to-end flow on the live Vercel URL.
+- Run Lighthouse audits to ensure we hit the required scores (Performance ≥ 85, Accessibility ≥ 90).
+- Finalize the `README.md` and complete the remaining entrepreneurial evaluation docs.
