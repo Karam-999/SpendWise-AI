@@ -1,202 +1,77 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
+import { getSupabase } from "@/lib/supabase";
 import type { AuditOutput } from "@/lib/types";
-function scoreColor(score: number): string {
-  if (score >= 85) return "text-emerald-600 bg-emerald-50 border-emerald-200";
-  if (score >= 60) return "text-amber-600 bg-amber-50 border-amber-200";
-  return "text-red-600 bg-red-50 border-red-200";
+import AuditResultClient from "./client";
+
+interface PageProps {
+  params: Promise<{ id: string }>;
 }
-function scoreLabel(score: number): string {
-  if (score >= 85) return "Excellent";
-  if (score >= 70) return "Good";
-  if (score >= 50) return "Needs work";
-  return "Poor";
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+
+  const supabase = getSupabase();
+  if (!supabase) {
+    return { title: "AI Spend Audit" };
+  }
+
+  const { data } = await supabase
+    .from("audits")
+    .select("results_json, total_savings")
+    .eq("id", id)
+    .single();
+
+  if (!data) {
+    return { title: "Audit not found — AI Spend Audit" };
+  }
+
+  const output = data.results_json as AuditOutput;
+  const savings = data.total_savings as number;
+
+  const topRec = output.results[0];
+  const description = topRec
+    ? `Top recommendation: ${topRec.recommendedAction} — saves $${topRec.savings}/mo`
+    : "AI tool stack is well-optimized";
+
+  return {
+    title: savings > 0
+      ? `I could save $${savings}/month on AI tools`
+      : "My AI stack is optimized — AI Spend Audit",
+    description,
+    openGraph: {
+      title: savings > 0
+        ? `I could save $${savings}/month on AI tools — see my audit`
+        : "My AI stack is optimized — see my audit",
+      description,
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: savings > 0
+        ? `I could save $${savings}/month on AI tools`
+        : "My AI stack is optimized",
+      description,
+    },
+  };
 }
-export default function AuditResultPage() {
-  const params = useParams<{ id: string }>();
-  const auditId = params.id;
-  const [output, setOutput] = useState<AuditOutput | null>(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const cached = sessionStorage.getItem(`audit-${auditId}`);
-    if (cached) {
-      try {
-        setOutput(JSON.parse(cached) as AuditOutput);
-        setLoading(false);
-        return;
-      } catch {
-      }
+
+export default async function AuditResultPage({ params }: PageProps) {
+  const { id } = await params;
+
+  let serverOutput: AuditOutput | null = null;
+
+  const supabase = getSupabase();
+  if (supabase) {
+    const { data } = await supabase
+      .from("audits")
+      .select("results_json")
+      .eq("id", id)
+      .single();
+
+    if (data) {
+      serverOutput = data.results_json as AuditOutput;
     }
-    setLoading(false);
-  }, [auditId]);
-  if (loading) {
-    return (
-      <div className="flex flex-1 items-center justify-center min-h-screen bg-background">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-foreground border-t-transparent" />
-          <p className="text-sm text-muted-foreground">Loading your audit…</p>
-        </div>
-      </div>
-    );
   }
-  if (!output) {
-    return (
-      <div className="flex flex-1 items-center justify-center min-h-screen bg-background">
-        <div className="text-center">
-          <h2 className="text-lg font-semibold mb-2">Audit not found</h2>
-          <p className="text-sm text-muted-foreground mb-4">
-            This audit may have expired or the link is invalid.
-          </p>
-          <a href="/" className="text-sm underline underline-offset-4">
-            Run a new audit →
-          </a>
-        </div>
-      </div>
-    );
-  }
-  const hasSavings = output.totalMonthlySavings > 0;
-  return (
-    <div className="flex flex-col flex-1 bg-background">
-      <main className="mx-auto w-full max-w-2xl px-4 py-12 sm:px-6">
-        <a
-          href="/"
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-8 transition-colors"
-        >
-          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          New audit
-        </a>
-        <div className="mb-8">
-          {output.spendingWell ? (
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <svg className="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                <h1 className="text-xl font-semibold text-emerald-900">
-                  You&apos;re spending well
-                </h1>
-              </div>
-              <p className="text-sm text-emerald-700">
-                Your AI tool stack looks well-optimized. No significant savings
-                opportunities found right now.
-              </p>
-            </div>
-          ) : (
-            <div>
-              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-                Save{" "}
-                <span className="text-emerald-600">
-                  ${output.totalMonthlySavings.toLocaleString()}
-                </span>
-                /mo
-              </h1>
-              <p className="mt-1 text-lg text-muted-foreground">
-                ${output.totalAnnualSavings.toLocaleString()} per year
-              </p>
-            </div>
-          )}
-        </div>
-        <div className="mb-8">
-          <div
-            className={`inline-flex items-center gap-2.5 rounded-lg border px-4 py-2.5 ${scoreColor(
-              output.spendScore
-            )}`}
-          >
-            <div className="text-2xl font-bold tabular-nums">
-              {output.spendScore}
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold uppercase tracking-wider leading-none">
-                AI Spend Score
-              </span>
-              <span className="text-xs mt-0.5 opacity-75">
-                {scoreLabel(output.spendScore)}
-              </span>
-            </div>
-          </div>
-        </div>
-        {output.results.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3">
-              Recommendations
-            </h2>
-            <div className="flex flex-col gap-3">
-              {output.results.map((r, i) => (
-                <div
-                  key={`${r.tool}-${i}`}
-                  className="rounded-lg border border-border bg-card p-4"
-                >
-                  <div className="flex items-start justify-between gap-4 mb-2">
-                    <div>
-                      <h3 className="text-sm font-semibold">{r.label}</h3>
-                      <p className="text-xs text-muted-foreground">
-                        Current: {r.currentPlan} · ${r.currentSpend}/mo
-                      </p>
-                    </div>
-                    {r.savings > 0 && (
-                      <span className="shrink-0 rounded-md bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-xs font-semibold text-emerald-700 tabular-nums">
-                        −${r.savings}/mo
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm font-medium mb-1">
-                    → {r.recommendedAction}
-                  </p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {r.reason}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        {!hasSavings && !output.spendingWell && (
-          <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              No specific recommendations for your current setup. Your stack
-              looks reasonable.
-            </p>
-          </div>
-        )}
-        {output.showCredexCTA && (
-          <div className="mb-8 rounded-lg border-2 border-foreground bg-foreground/5 p-6">
-            <h2 className="text-base font-semibold mb-1">
-              Save even more with Credex
-            </h2>
-            <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-              With over ${output.totalMonthlySavings.toLocaleString()}/mo in
-              potential savings, Credex can help you access discounted AI credits
-              from companies that overforecasted — same tools, lower price.
-            </p>
-            <Button
-              size="lg"
-              className="h-10 text-sm"
-              onClick={() => window.open("https://credex.rocks", "_blank")}
-            >
-              Talk to Credex →
-            </Button>
-          </div>
-        )}
-        <div className="border-t border-border pt-6">
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-muted-foreground">
-              Audit ID: {auditId}
-            </p>
-            <button
-              className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-4 transition-colors"
-              onClick={() => {
-                navigator.clipboard.writeText(window.location.href);
-              }}
-            >
-              Copy link
-            </button>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
+
+  return <AuditResultClient auditId={id} serverOutput={serverOutput} />;
 }

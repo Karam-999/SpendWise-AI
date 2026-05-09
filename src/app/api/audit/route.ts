@@ -38,13 +38,15 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = getSupabase();
     if (supabase) {
-      await supabase.from("audits").insert({
+      const { error } = await supabase.from("audits").insert({
         id: auditId,
         tools_json: body,
         results_json: output,
         total_savings: output.totalMonthlySavings,
-        spend_score: output.spendScore,
       });
+      if (error) {
+        console.error("Supabase insert error:", error);
+      }
     }
   } catch (err) {
     console.error("Failed to save audit to Supabase:", err);

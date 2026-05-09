@@ -27,7 +27,7 @@ describe("auditEngine", () => {
 
     expect(output.results).toHaveLength(1);
     expect(output.results[0].recommendedAction).toContain("Downgrade");
-    expect(output.results[0].savings).toBe(20);
+    expect(output.results[0].savings).toBe(20); // $40 - $20
   });
 
   it("recommends dropping one tool when Cursor Pro + Copilot Individual are both active for coding", () => {

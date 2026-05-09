@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { AuditFormData, ToolInput, ToolName, UseCase, AuditResponse } from "@/lib/types";
 const PLAN_OPTIONS: Record<ToolName, string[]> = {
-  cursor: ["hobby", "pro", "business"],
-  github_copilot: ["individual", "business", "enterprise"],
-  claude: ["pro", "max", "team"],
-  chatgpt: ["plus", "team"],
+  cursor: ["hobby", "pro", "pro-plus", "ultra", "teams", "enterprise"],
+  github_copilot: ["free", "pro", "pro-plus", "business", "enterprise"],
+  claude: ["free", "pro", "max", "team", "enterprise"],
+  chatgpt: ["free", "go", "plus", "pro", "business"],
   anthropic_api: ["pay-as-you-go"],
   openai_api: ["pay-as-you-go"],
-  gemini: ["pro", "ultra"],
-  windsurf: ["free", "pro", "teams"],
+  gemini: ["free", "plus", "pro", "ultra"],
+  windsurf: ["free", "pro", "max", "teams", "enterprise"],
 };
 const TOOL_LABELS: Record<ToolName, string> = {
   cursor: "Cursor",

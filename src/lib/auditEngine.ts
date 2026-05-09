@@ -12,12 +12,12 @@ import type { AuditFormData, AuditOutput, ToolInput, ToolResult } from "./types"
 // ---------------------------------------------------------------------------
 
 const PRICING = {
-  cursor: { hobby: 0, pro: 20, business: 40 },
-  github_copilot: { individual: 10, business: 19, enterprise: 39 },
-  claude: { pro: 20, max: 100, team: 25 },
-  chatgpt: { plus: 20, team: 25 },
-  gemini: { pro: 19.99, ultra: 249.99 },
-  windsurf: { free: 0, pro: 15, teams: 35 },
+  cursor: { hobby: 0, pro: 20, pro_plus: 60, ultra: 200, teams: 40 },
+  github_copilot: { free: 0, pro: 10, pro_plus: 39, business: 19, enterprise: 39 },
+  claude: { free: 0, pro: 20, max: 100, team: 20 },
+  chatgpt: { go: 5, plus: 20, pro: 200, business: 25 },
+  gemini: { plus: 5, pro: 20, ultra: 250 },
+  windsurf: { free: 0, pro: 20, max: 200, teams: 40 },
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -52,14 +52,14 @@ function evaluateTool(
   // -----------------------------------------------------------------------
   // Rule 1: Team/Business plan for ≤2 users → downgrade to Pro/Individual
   // -----------------------------------------------------------------------
-  if (tool.tool === "cursor" && tool.plan === "business" && tool.seats <= 2) {
+  if (tool.tool === "cursor" && (tool.plan === "business" || tool.plan === "teams") && tool.seats <= 2) {
     const newSpend = tool.seats * PRICING.cursor.pro;
     return {
       ...base,
       recommendedAction: "Downgrade to Cursor Pro",
       newSpend,
       savings: tool.monthlySpend - newSpend,
-      reason: `Business plan at $40/user for only ${tool.seats} user(s). Pro at $20/user covers most features for small teams.`,
+      reason: `Teams plan at $40/user for only ${tool.seats} user(s). Pro at $20/user covers most features for small teams.`,
     };
   }
 
@@ -70,18 +70,18 @@ function evaluateTool(
       recommendedAction: "Downgrade to Claude Pro",
       newSpend,
       savings: tool.monthlySpend - newSpend,
-      reason: `Team plan at $25/user for only ${tool.seats} user(s). Pro at $20/user is more cost-effective for small teams.`,
+      reason: `Team plan requires a 5-seat minimum ($100/mo). For only ${tool.seats} user(s), individual Pro plans at $20/user save money.`,
     };
   }
 
-  if (tool.tool === "chatgpt" && tool.plan === "team" && tool.seats <= 2) {
+  if (tool.tool === "chatgpt" && (tool.plan === "team" || tool.plan === "business") && tool.seats <= 2) {
     const newSpend = tool.seats * PRICING.chatgpt.plus;
     return {
       ...base,
       recommendedAction: "Downgrade to ChatGPT Plus",
       newSpend,
       savings: tool.monthlySpend - newSpend,
-      reason: `Team plan at $25/user for only ${tool.seats} user(s). Plus at $20/user saves without losing much for small teams.`,
+      reason: `Business plan at $25/user for only ${tool.seats} user(s). Plus at $20/user saves without losing much for small teams.`,
     };
   }
 
@@ -103,7 +103,7 @@ function evaluateTool(
       recommendedAction: "Downgrade to Windsurf Pro",
       newSpend,
       savings: tool.monthlySpend - newSpend,
-      reason: `Teams plan at $35/user for only ${tool.seats} user(s). Pro at $15/user covers individual needs.`,
+      reason: `Teams plan at $40/user for only ${tool.seats} user(s). Pro at $20/user covers individual needs.`,
     };
   }
 
@@ -131,7 +131,7 @@ function evaluateTool(
       recommendedAction: "Downgrade to Gemini Pro",
       newSpend,
       savings: tool.monthlySpend - newSpend,
-      reason: `Ultra at $249.99/mo is overkill for ${useCase}. Pro at $19.99/mo handles writing and research well.`,
+      reason: `Ultra at $250/mo is overkill for ${useCase}. Pro at $20/mo handles writing and research well.`,
     };
   }
 
