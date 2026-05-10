@@ -79,3 +79,23 @@ did not  see the message for this assignment
 
 - Run Lighthouse audits to ensure we hit the required scores (Performance ≥ 85, Accessibility ≥ 90).
 - Finalize the `README.md` and complete the remaining entrepreneurial evaluation docs.
+
+## Day 5 : 10-05-2026
+
+**Hours worked:** 5
+
+**What I did:**
+- Transformed the app from a simple single-column tool into a high-fidelity B2B SaaS landing page.
+- Componentized the monolithic `page.tsx` into modular UI components (`Navbar`, `TrustStrip`, `Hero`, `HowItWorks`, `Platforms`, `Guarantee`, `FAQ`, `CTASection`, `Footer`).
+- Implemented dynamic lead capture forms (`CredexLeadForms.tsx`) featuring a multi-field structure (Name, Company, Email, Phone, Platform, Message) designed to capture leads who want to buy or sell AI credits.
+- Refactored the audit results UI (`client.tsx`) to surface contextual CTA cards side-by-side ("Buy Credits" and "Sell Credits") alongside the original email summary form, maximizing conversion opportunities regardless of whether the user has savings or a lean stack.
+
+**What I learned:**
+- Using `animate-in fade-in slide-in-from-bottom` classes in Tailwind provides a highly polished, interactive feel for dynamically mounted forms.
+
+**Blockers / what I'm stuck on:**
+- No blockers. The application is functionally complete and the business logic integration is stable.
+
+**Plan for tomorrow:**
+- Ui improvements and bug fixes
+- Final polish, Lighthouse audits, and submitting the project.
