@@ -59,7 +59,7 @@ function evaluateTool(
       recommendedAction: "Downgrade to Cursor Pro",
       newSpend,
       savings: tool.monthlySpend - newSpend,
-      reason: `Teams plan at $40/user for only ${tool.seats} user(s). Pro at $20/user covers most features for small teams.`,
+      reason: `Teams plan at $40/user for only ${tool.seats} user${tool.seats > 1 ? 's' : ''}. Pro at $20/user covers most features for small teams.`,
     };
   }
 
@@ -70,7 +70,7 @@ function evaluateTool(
       recommendedAction: "Downgrade to Claude Pro",
       newSpend,
       savings: tool.monthlySpend - newSpend,
-      reason: `Team plan requires a 5-seat minimum ($100/mo). For only ${tool.seats} user(s), individual Pro plans at $20/user save money.`,
+      reason: `Team plan requires a 5-seat minimum ($100/mo). For only ${tool.seats} user${tool.seats > 1 ? 's' : ''}, individual Pro plans at $20/user save money.`,
     };
   }
 
@@ -92,7 +92,7 @@ function evaluateTool(
       recommendedAction: "Downgrade to Copilot Business",
       newSpend,
       savings: tool.monthlySpend - newSpend,
-      reason: `Enterprise at $39/user for only ${tool.seats} user(s). Business at $19/user is sufficient for small teams.`,
+      reason: `Enterprise at $39/user for only ${tool.seats} user${tool.seats > 1 ? 's' : ''}. Business at $19/user is sufficient for small teams.`,
     };
   }
 
@@ -103,7 +103,7 @@ function evaluateTool(
       recommendedAction: "Downgrade to Windsurf Pro",
       newSpend,
       savings: tool.monthlySpend - newSpend,
-      reason: `Teams plan at $40/user for only ${tool.seats} user(s). Pro at $20/user covers individual needs.`,
+      reason: `Teams plan at $40/user for only ${tool.seats} user${tool.seats > 1 ? 's' : ''}. Pro at $20/user covers individual needs.`,
     };
   }
 
@@ -136,24 +136,24 @@ function evaluateTool(
   }
 
   // -----------------------------------------------------------------------
-  // Rule 4: API direct spend under $20 → flat plan
+  // Rule 4: API direct spend over $20 → flat plan saves money
   // -----------------------------------------------------------------------
-  if (tool.tool === "openai_api" && tool.monthlySpend < 20) {
+  if (tool.tool === "openai_api" && tool.monthlySpend > 20) {
     return {
       ...base,
       recommendedAction: "Switch to ChatGPT Plus ($20/mo)",
       newSpend: PRICING.chatgpt.plus,
-      savings: Math.max(0, tool.monthlySpend - PRICING.chatgpt.plus),
+      savings: tool.monthlySpend - PRICING.chatgpt.plus,
       reason: `Spending $${tool.monthlySpend}/mo on OpenAI API. ChatGPT Plus at $20/mo gives generous usage with a predictable bill.`,
     };
   }
 
-  if (tool.tool === "anthropic_api" && tool.monthlySpend < 20) {
+  if (tool.tool === "anthropic_api" && tool.monthlySpend > 20) {
     return {
       ...base,
       recommendedAction: "Switch to Claude Pro ($20/mo)",
       newSpend: PRICING.claude.pro,
-      savings: Math.max(0, tool.monthlySpend - PRICING.claude.pro),
+      savings: tool.monthlySpend - PRICING.claude.pro,
       reason: `Spending $${tool.monthlySpend}/mo on Anthropic API. Claude Pro at $20/mo gives generous usage with a predictable bill.`,
     };
   }

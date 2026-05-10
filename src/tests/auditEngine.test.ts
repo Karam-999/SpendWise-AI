@@ -80,15 +80,59 @@ describe("auditEngine", () => {
     expect(output.spendScore).toBe(100);
   });
 
-  it("recommends flat plan when API direct spend is under $20", () => {
+  it("recommends flat plan when OpenAI API spend exceeds $20", () => {
     const form = makeForm([
-      makeTool({ tool: "openai_api", plan: "pay-as-you-go", monthlySpend: 12, seats: 1 }),
+      makeTool({ tool: "openai_api", plan: "pay-as-you-go", monthlySpend: 35, seats: 1 }),
     ]);
 
     const output = auditEngine(form);
 
     expect(output.results).toHaveLength(1);
     expect(output.results[0].recommendedAction).toContain("ChatGPT Plus");
+    expect(output.results[0].savings).toBe(15);
+  });
+
+  it("recommends flat plan when Anthropic API spend exceeds $20", () => {
+    const form = makeForm([
+      makeTool({ tool: "anthropic_api", plan: "pay-as-you-go", monthlySpend: 45, seats: 1 }),
+    ]);
+
+    const output = auditEngine(form);
+
+    expect(output.results).toHaveLength(1);
+    expect(output.results[0].recommendedAction).toContain("Claude Pro");
+    expect(output.results[0].savings).toBe(25);
+  });
+
+  it("recommends Gemini Pro when Ultra is used for writing", () => {
+    const form = makeForm(
+      [makeTool({ tool: "gemini", plan: "ultra", monthlySpend: 250, seats: 1 })],
+      5,
+      "writing"
+    );
+
+    const output = auditEngine(form);
+
+    expect(output.results).toHaveLength(1);
+    expect(output.results[0].recommendedAction).toContain("Gemini Pro");
+    expect(output.results[0].savings).toBe(230);
+  });
+
+  it("drops ChatGPT when both Claude and ChatGPT are active for coding", () => {
+    const form = makeForm(
+      [
+        makeTool({ tool: "claude", plan: "pro", monthlySpend: 20, seats: 1 }),
+        makeTool({ tool: "chatgpt", plan: "plus", monthlySpend: 20, seats: 1 }),
+      ],
+      5,
+      "coding"
+    );
+
+    const output = auditEngine(form);
+
+    const dropRec = output.results.find((r) => r.tool === "chatgpt");
+    expect(dropRec).toBeDefined();
+    expect(dropRec!.savings).toBe(20);
   });
 
   it("ignores tools with 0 seats", () => {

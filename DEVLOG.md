@@ -76,7 +76,6 @@ did not  see the message for this assignment
 - Resend's free tier only allows sending emails from `onboarding@resend.dev` to the verified testing email address. It does not work in production on a `.vercel.app` domain without verifying a custom domain, so the email flow will only work for testing purposes right now.
 
 **Plan for tomorrow:**
-- Add all production environment variables (Supabase, Groq, Resend) to the existing Vercel deployment.
-- Test the full end-to-end flow on the live Vercel URL.
+
 - Run Lighthouse audits to ensure we hit the required scores (Performance ≥ 85, Accessibility ≥ 90).
 - Finalize the `README.md` and complete the remaining entrepreneurial evaluation docs.

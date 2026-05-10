@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 
 interface LeadCaptureFormProps {
   auditId: string;
+  hasSavings?: boolean;
 }
 
-export default function LeadCaptureForm({ auditId }: LeadCaptureFormProps) {
+export default function LeadCaptureForm({ auditId, hasSavings = true }: LeadCaptureFormProps) {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -17,7 +18,12 @@ export default function LeadCaptureForm({ auditId }: LeadCaptureFormProps) {
 
   if (status === "success") {
     return (
-      <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-4 text-center">
+      <div className="rounded-md border border-emerald-200 bg-emerald-50/60 p-5 text-center">
+        <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center mx-auto mb-2">
+          <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
         <p className="text-sm font-medium text-emerald-900">Check your inbox</p>
         <p className="text-xs text-emerald-700 mt-1">
           We sent your audit summary to {email}
@@ -53,26 +59,32 @@ export default function LeadCaptureForm({ auditId }: LeadCaptureFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg border border-border bg-card p-4">
-      <p className="text-sm font-medium mb-1">Get your audit by email</p>
-      <p className="text-xs text-muted-foreground mb-3">
-        We&apos;ll send a summary with your results and a link to this page.
+    <form onSubmit={handleSubmit} className="rounded-md border border-border bg-card p-5">
+      <p className="text-sm font-semibold mb-1">
+        {hasSavings ? "Get your audit by email" : "Get notified about new optimizations"}
       </p>
-      <div className="flex flex-col gap-2">
+      <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
+        {hasSavings
+          ? "We\u0027ll send a summary with your results and a permanent link to this report."
+          : "We\u0027ll notify you when new savings apply to your stack — no spam, just relevant updates."}
+      </p>
+      <div className="flex flex-col gap-2.5">
         <input
           type="email"
           required
           placeholder="you@company.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          aria-label="Email address"
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
         />
-        <div className="flex gap-2">
+        <div className="flex gap-2.5">
           <input
             type="text"
             placeholder="Company (optional)"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
+            aria-label="Company name"
             className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
           <input
@@ -80,6 +92,7 @@ export default function LeadCaptureForm({ auditId }: LeadCaptureFormProps) {
             placeholder="Role (optional)"
             value={role}
             onChange={(e) => setRole(e.target.value)}
+            aria-label="Role"
             className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
         </div>
@@ -101,7 +114,7 @@ export default function LeadCaptureForm({ auditId }: LeadCaptureFormProps) {
           className="h-9 text-sm"
           disabled={status === "loading" || !email}
         >
-          {status === "loading" ? "Sending…" : "Send my audit"}
+          {status === "loading" ? "Sending…" : hasSavings ? "Send my audit" : "Notify me"}
         </Button>
       </div>
     </form>
