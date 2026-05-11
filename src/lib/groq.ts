@@ -39,7 +39,7 @@ Total monthly savings: $${output.totalMonthlySavings}
 AI Spend Score: ${output.spendScore}/100
 ${output.spendingWell ? "Result: stack is well-optimized, no major savings found." : `Recommendations:\n${toolList}`}
 
-Write a ${output.spendingWell ? "reassuring" : "direct, actionable"} 80–100 word summary. Be specific about their tools and numbers. No generic advice. No bullet points. No greeting.`;
+Write a ${output.spendingWell ? "reassuring" : "direct, actionable"} 100–120 word summary. Be specific about their tools and numbers. No generic advice. No bullet points. No greeting.`;
 
   try {
     const res = await groq.chat.completions.create({

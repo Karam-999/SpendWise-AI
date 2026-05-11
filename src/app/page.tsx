@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { AuditFormData, ToolInput, ToolName, UseCase, AuditResponse } from "@/lib/types";
 
-// Import Components
 import Navbar from "@/components/Navbar";
 import TrustStrip from "@/components/TrustStrip";
 import Hero from "@/components/Hero";
@@ -14,6 +13,8 @@ import Guarantee from "@/components/Guarantee";
 import FAQ from "@/components/FAQ";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
+
+import LeadForms from "@/components/LeadForms";
 
 const PLAN_OPTIONS: Record<ToolName, string[]> = {
   cursor: ["hobby", "pro", "pro-plus", "ultra", "teams", "enterprise"],
@@ -86,6 +87,8 @@ export default function HomePage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
+  const [showBuyForm, setShowBuyForm] = useState(false);
+  const [showSellForm, setShowSellForm] = useState(false);
 
   useEffect(() => {
     try {
@@ -139,17 +142,27 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col flex-1 bg-[#fafafa]">
-      <Navbar onAuditClick={scrollToForm} />
-      <TrustStrip />
-      <Hero onAuditClick={scrollToForm} />
-      <HowItWorks />
-      <Platforms />
+      <Navbar onAuditClick={scrollToForm} setShowBuyForm={setShowBuyForm} setShowSellForm={setShowSellForm} />
       
-      {/* Audit form section */}
+      {showBuyForm || showSellForm ? (
+        <div className="py-16 sm:py-24 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-4">
+            <Button variant="ghost" size="sm" onClick={() => { setShowBuyForm(false); setShowSellForm(false); }} className="text-neutral-500 hover:text-neutral-900">
+              ← Back to home
+            </Button>
+          </div>
+          <LeadForms auditId="homepage-lead" mode={showBuyForm ? "buy" : "sell"} />
+        </div>
+      ) : (
+        <>
+          <TrustStrip />
+          <Hero onAuditClick={scrollToForm} />
+          <HowItWorks />
+          <Platforms />
+      
       <section ref={formRef} id="audit" className="border-b border-neutral-200">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-            {/* Left info panel */}
             <div className="lg:col-span-4">
               <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-500 mb-2">Run your audit</p>
               <h2 className="font-mono text-2xl font-bold tracking-tight text-neutral-900 mb-4">Configure your AI stack</h2>
@@ -160,11 +173,10 @@ export default function HomePage() {
               <div className="space-y-3 text-xs text-neutral-500">
                 <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Form state persists across reloads</div>
                 <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Results are shareable via unique URL</div>
-                <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />AI-generated summary included</div>
+                <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Summary of spend included</div>
                 <div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Email delivery optional</div>
               </div>
             </div>
-            {/* Right form */}
             <div className="lg:col-span-8">
               <div className="bg-white border border-neutral-200 rounded-lg p-6 sm:p-8">
                 <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:gap-6">
@@ -212,6 +224,8 @@ export default function HomePage() {
       <Guarantee />
       <FAQ />
       <CTASection onAuditClick={scrollToForm} />
+      </>
+      )}
       <Footer />
     </div>
   );

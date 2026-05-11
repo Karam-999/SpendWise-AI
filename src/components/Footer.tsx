@@ -10,7 +10,7 @@ export default function Footer() {
             <p className="text-xs text-neutral-500 mt-2 max-w-xs leading-relaxed">
               AI infrastructure spend optimization tool. Find discounts on AI and cloud credits from companies that overforecasted.
             </p>
-            <p className="text-xs text-neutral-400 mt-3">team@spendwise.rocks</p>
+            <p className="text-xs text-neutral-400 mt-3">connect.with.karam25@gmail.com</p>
           </div>
           <div className="flex gap-12">
             <div className="flex flex-col gap-2.5">
@@ -29,11 +29,11 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <span className="font-medium text-neutral-900 uppercase tracking-wider text-[11px] mb-2 block">SpendWise HQ</span>
+            <span className="font-medium text-neutral-900 uppercase tracking-wider text-[11px] mb-2 block">Location</span>
             <div className="space-y-3">
               <div>
                 <p className="text-xs font-medium text-neutral-700">Remote</p>
-                <p className="text-xs text-neutral-500 leading-relaxed">Global Team</p>
+             
               </div>
             </div>
           </div>

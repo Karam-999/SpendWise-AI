@@ -16,14 +16,16 @@ export default function Hero({ onAuditClick }: { onAuditClick: () => void }) {
             </h1>
             <p className="mt-5 text-[15px] text-neutral-600 leading-relaxed max-w-md">
               Free audit that checks your AI stack against verified vendor pricing.
-              Get actionable savings recommendations in 60 seconds — no signup, no sales calls.
+              Get actionable savings recommendations in 60 seconds - no signup, no sales calls.
+              We are not an AI company. We are a vendor-agnostic spend intelligence platform that helps businesses optimize their cloud and AI infrastructure costs.
+
             </p>
             <div className="mt-8 flex items-center gap-3">
               <Button size="lg" className="h-12 px-7 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-full" onClick={onAuditClick}>
                 Run free audit
               </Button>
               <a href="#how-it-works" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors ml-1">
-                How it works →
+                How it Works →
               </a>
             </div>
           </div>

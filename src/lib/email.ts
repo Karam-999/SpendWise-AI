@@ -59,3 +59,46 @@ export async function sendAuditEmail(
     return false;
   }
 }
+
+export async function notifyAdminOfMarketplaceLead(
+  adminEmail: string,
+  lead: {
+    mode: "buy" | "sell";
+    fullName: string;
+    email: string;
+    company: string;
+    phone?: string;
+    platform?: string;
+    message?: string;
+  }
+): Promise<boolean> {
+  const resend = getResend();
+  if (!resend) {
+    console.warn("RESEND_API_KEY not set — skipping admin email.");
+    return false;
+  }
+
+  const text = [
+    `New Marketplace Lead (${lead.mode.toUpperCase()} Credits)`,
+    ``,
+    `Name: ${lead.fullName}`,
+    `Email: ${lead.email}`,
+    `Company: ${lead.company}`,
+    `Phone: ${lead.phone || "N/A"}`,
+    `Platform: ${lead.platform || "N/A"}`,
+    `Message: ${lead.message || "N/A"}`,
+  ].join("\n");
+
+  try {
+    await resend.emails.send({
+      from: "SpendWise-AI Marketplace <onboarding@resend.dev>",
+      to: adminEmail,
+      subject: `New ${lead.mode.toUpperCase()} Request: ${lead.company} (${lead.fullName})`,
+      text,
+    });
+    return true;
+  } catch (err) {
+    console.error("Resend admin email failed:", err);
+    return false;
+  }
+}

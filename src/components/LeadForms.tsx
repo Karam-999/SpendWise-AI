@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-interface CredexLeadFormsProps {
+interface LeadFormsProps {
   auditId: string;
   mode: "buy" | "sell";
 }
@@ -17,7 +17,7 @@ const PLATFORM_OPTIONS = [
   "GitHub Copilot",
 ];
 
-export default function CredexLeadForms({ auditId, mode }: CredexLeadFormsProps) {
+export default function LeadForms({ auditId, mode }: LeadFormsProps) {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -26,7 +26,7 @@ export default function CredexLeadForms({ auditId, mode }: CredexLeadFormsProps)
     platform: "",
     otherPlatform: "",
     message: "",
-    website: "", // honeypot
+    website: "",
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -43,17 +43,17 @@ export default function CredexLeadForms({ auditId, mode }: CredexLeadFormsProps)
     setErrorMsg("");
 
     try {
-      // Pack the extra info into the role field to bypass schema constraints for the MVP
-      const combinedInfo = `${mode.toUpperCase()} Lead | Name: ${formData.fullName} | Phone: ${formData.phone} | Platform: ${formData.platform || formData.otherPlatform} | Msg: ${formData.message}`;
-
-      const res = await fetch("/api/leads", {
+      const res = await fetch("/api/marketplace-leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          auditId,
+          mode,
+          fullName: formData.fullName,
           email: formData.email,
           company: formData.company,
-          role: combinedInfo.substring(0, 255), // Truncate if necessary
+          phone: formData.phone,
+          platform: formData.platform === "other" ? formData.otherPlatform : formData.platform,
+          message: formData.message,
           website: formData.website,
         }),
       });
@@ -115,7 +115,7 @@ export default function CredexLeadForms({ auditId, mode }: CredexLeadFormsProps)
               type="text"
               name="fullName"
               required
-              placeholder="e.g. Sarah Ferguson"
+              placeholder="e.g. Karam Syed"
               value={formData.fullName}
               onChange={handleChange}
               className="w-full rounded-md border border-neutral-200 bg-neutral-50/50 px-3 py-2.5 text-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-neutral-400 transition-colors"

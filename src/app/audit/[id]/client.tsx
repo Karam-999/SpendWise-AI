@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import LeadCaptureForm from "@/components/LeadCaptureForm";
-import CredexLeadForms from "@/components/CredexLeadForms";
+import LeadForms from "@/components/LeadForms";
 import type { AuditOutput } from "@/lib/types";
 
 function scoreColor(score: number): string {
@@ -191,7 +191,7 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
         {summary && (
           <div className="mb-8 rounded-md border border-border bg-card p-5">
             <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-[0.1em] mb-2.5">
-              AI-Generated Analysis
+              Summary
             </p>
             <p className="text-sm leading-relaxed text-foreground/90">{summary}</p>
           </div>
@@ -309,7 +309,7 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
                   ← Back to audit results
                 </Button>
               </div>
-              <CredexLeadForms auditId={auditId} mode="buy" />
+              <LeadForms auditId={auditId} mode="buy" />
             </div>
           )}
 
@@ -320,7 +320,7 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
                   ← Back to audit results
                 </Button>
               </div>
-              <CredexLeadForms auditId={auditId} mode="sell" />
+              <LeadForms auditId={auditId} mode="sell" />
             </div>
           )}
         </div>

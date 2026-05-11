@@ -1,0 +1,59 @@
+<svg width="600" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .cube-top  { fill: #48b191; stroke: #1a4d3e; stroke-width: 1.5; }
+      .cube-left { fill: #2d9b7b; stroke: #1a4d3e; stroke-width: 1.5; }
+      .cube-right{ fill: #1f7a60; stroke: #1a4d3e; stroke-width: 1.5; }
+      .text-main { fill: #2d9b7b; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; font-size: 65px; }
+      .text-wise { fill: #2094c4; }
+    </style>
+  </defs>
+
+  <g transform="translate(75, 60)">
+
+    <!-- Bottom-left cube -->
+    <g transform="translate(-5, 45)">
+      <path class="cube-top"   d="M30 0 L60 15 L30 30 L0 15 Z"/>
+      <path class="cube-left"  d="M0 15 L0 45 L30 60 L30 30 Z"/>
+      <path class="cube-right" d="M30 30 L30 60 L60 45 L60 15 Z"/>
+    </g>
+
+    <!-- Bottom-right cube -->
+    <g transform="translate(54, 46)">
+      <path class="cube-top"   d="M30 0 L60 15 L30 30 L0 15 Z"/>
+      <path class="cube-left"  d="M0 15 L0 45 L30 60 L30 30 Z"/>
+      <path class="cube-right" d="M30 30 L30 60 L60 45 L60 15 Z"/>
+    </g>
+
+    <!-- Top cube with embedded GitHub icon -->
+    <g transform="translate(25, 0)">
+      <path class="cube-top"   d="M30 0 L60 15 L30 30 L0 15 Z"/>
+      <path class="cube-left"  d="M0 15 L0 45 L30 60 L30 30 Z"/>
+      <path class="cube-right" d="M30 30 L30 60 L60 45 L60 15 Z"/>
+
+      <!-- GitHub icon: path in 16×16 space, positioned & rotated on top face -->
+      <g transform="translate(362, 75) scale(1)">
+        <path fill="#000000"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59
+             .4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49
+             -2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+             -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82
+             .72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07
+             -1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+             -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82
+             .64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82
+             .44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+             0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+             0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38
+             A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+      </g>
+        <text x="383" y="89" fill="#00000" font-family="Arial" font-weight="bold" font-size="12">Karam-999</text>
+    </g>
+
+  </g>
+
+  <!-- SpendWise text -->
+  <text x="210" y="130" class="text-main">
+    Spend<tspan class="text-wise">Wise</tspan>
+  </text>
+</svg>

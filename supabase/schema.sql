@@ -17,3 +17,15 @@ CREATE TABLE IF NOT EXISTS leads (
 );
 CREATE INDEX IF NOT EXISTS idx_leads_audit_id ON leads(audit_id);
 CREATE INDEX IF NOT EXISTS idx_audits_created_at ON audits(created_at DESC);
+
+CREATE TABLE IF NOT EXISTS marketplace_leads (
+  id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  mode        TEXT NOT NULL,
+  full_name   TEXT NOT NULL,
+  email       TEXT NOT NULL,
+  company     TEXT NOT NULL,
+  phone       TEXT,
+  platform    TEXT,
+  message     TEXT,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

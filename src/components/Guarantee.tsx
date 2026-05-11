@@ -11,16 +11,17 @@ export default function Guarantee() {
               Accurate, defensible, transparent
             </h2>
             <p className="text-[15px] text-neutral-600 leading-relaxed mb-6">
-              Every recommendation traces back to verified vendor pricing. The audit engine is deterministic —
-              same input always produces the same output. No AI hallucinations in the math.
+              Every recommendation traces back to verified latest vendor pricing. The audit engine is deterministically programmed
+              so the same input always produces the same output. No AI hallucinations in the math.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { title: "Verified pricing", desc: "Every number traces to an official vendor pricing page, checked weekly." },
-              { title: "Deterministic rules", desc: "No AI guesswork in the audit logic. Six explainable rules with clear reasoning." },
-              { title: "No data sharing", desc: "Your stack details stay in your browser. Audit results are only stored if you opt in." },
+              { title: "Deterministic Audit rules", desc: "No AI guesswork in the audit logic. Six explainable rules with clear reasoning." },
               { title: "Open methodology", desc: "The audit engine logic is fully documented. A finance person can verify every recommendation." },
+              { title: "No data sharing", desc: "Your stack details stay in your browser. Audit results are only stored if you opt in." },
+              { title: "Verified pricing", desc: "Every number traces to an official vendor pricing page, checked weekly." },
+              { title: "Credit Guarantee", desc: "If you purchase credits from us, we guarantee your savings, or we cover the difference." },
             ].map((item) => (
               <div key={item.title} className="border border-neutral-200 rounded-xl p-5 bg-white">
                 <div className="h-2 w-2 rounded-full bg-emerald-500 mb-3" />

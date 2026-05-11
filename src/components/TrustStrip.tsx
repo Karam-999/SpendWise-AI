@@ -2,13 +2,11 @@
 
 const TRUST_ITEMS = [
   "Verified pricing data",
-  "Deterministic audit rules",
   "No signup required",
-  "Real vendor pricing",
-  "Built for engineering teams",
+  "Buy/Sell Credits",
+  "Built for Startups/Teams",
   "Shareable audit reports",
   "AI-powered summaries",
-  "Open source engine",
 ];
 
 export default function TrustStrip() {
