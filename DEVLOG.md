@@ -17,7 +17,7 @@ did not  see the message for this assignment
 - Set up the Supabase, signed up for Groq and installed the required packages 
 
 **What I learned:**
-- Next.js 16 requires `params` to be awaited as a Promise in both pages and API routes — different from Next.js 14 which I was initially planning for. 
+- Next.js 16 requires `params` to be awaited as a Promise in both pages and API routes — different from Next.js 14. 
 - The shadcn/ui radix-lyra style uses `rounded-none` by default on buttons, which I need to keep in mind for visual consistency.
 - localStorage persistence needs careful handling to avoid hydration mismatches — rendering a loading spinner until the client state is read is the cleanest approach.
 
@@ -99,3 +99,23 @@ did not  see the message for this assignment
 **Plan for tomorrow:**
 - Ui improvements and bug fixes
 - Final polish, Lighthouse audits, and submitting the project.
+
+## Day 6 : 11-05-2026
+
+**Hours worked:** 4
+
+**What I did:**
+- Removed the main logo in the Navbar.
+- Expanded and overhauled the FAQ section. Added comprehensive answers detailing the marketplace mechanics, the guarantee, escrow flows, and transfer processes. Re-integrated the core audit engine questions.
+- Refined copywriting in the Hero section to explicitly state our vendor-agnostic positioning.
+- Updated the Guarantee section to reflect the new SpendWise guarantee terms.
+- Cleaned up the Footer and updated contact information.
+
+**What I learned:**
+- Consistent branding changes across a full-stack Next.js app require careful tracking of component names, image assets, and copy, in addition to simple find-and-replace.
+
+**Blockers / what I'm stuck on:**
+- No blockers. The application is fully rebranded and polished.
+
+**Plan for tomorrow:**
+- Final polishing, debugging, review and submission.
