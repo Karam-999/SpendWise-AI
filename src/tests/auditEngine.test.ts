@@ -80,28 +80,28 @@ describe("auditEngine", () => {
     expect(output.spendScore).toBe(100);
   });
 
-  it("recommends flat plan when OpenAI API spend exceeds $20", () => {
+  it("recommends discounted credits when OpenAI API is used", () => {
     const form = makeForm([
-      makeTool({ tool: "openai_api", plan: "pay-as-you-go", monthlySpend: 35, seats: 1 }),
+      makeTool({ tool: "openai_api", plan: "pay-as-you-go", monthlySpend: 100, seats: 1 }),
     ]);
 
     const output = auditEngine(form);
 
     expect(output.results).toHaveLength(1);
-    expect(output.results[0].recommendedAction).toContain("ChatGPT Plus");
-    expect(output.results[0].savings).toBe(15);
+    expect(output.results[0].recommendedAction).toContain("Buy discounted");
+    expect(output.results[0].savings).toBe(45); // 45% of 100
   });
 
-  it("recommends flat plan when Anthropic API spend exceeds $20", () => {
+  it("recommends discounted credits when Anthropic API is used", () => {
     const form = makeForm([
-      makeTool({ tool: "anthropic_api", plan: "pay-as-you-go", monthlySpend: 45, seats: 1 }),
+      makeTool({ tool: "anthropic_api", plan: "pay-as-you-go", monthlySpend: 100, seats: 1 }),
     ]);
 
     const output = auditEngine(form);
 
     expect(output.results).toHaveLength(1);
-    expect(output.results[0].recommendedAction).toContain("Claude Pro");
-    expect(output.results[0].savings).toBe(25);
+    expect(output.results[0].recommendedAction).toContain("Buy discounted");
+    expect(output.results[0].savings).toBe(45); // 45% of 100
   });
 
   it("recommends Gemini Pro when Ultra is used for writing", () => {

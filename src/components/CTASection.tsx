@@ -14,7 +14,7 @@ export default function CTASection({ onAuditClick }: { onAuditClick: () => void 
             Run a free audit in 60 seconds. No signup, no sales calls.
             Just real savings backed by verified pricing data.
           </p>
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
               size="lg"
               className="h-12 px-8 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-full"
@@ -23,7 +23,7 @@ export default function CTASection({ onAuditClick }: { onAuditClick: () => void 
               Run free audit
             </Button>
             <a
-              href="#"
+              href="#faq"
               className="text-sm text-neutral-400 hover:text-white transition-colors"
             >
               Learn about SpendWise →

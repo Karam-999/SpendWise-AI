@@ -34,15 +34,19 @@ export interface ToolResult {
   newSpend: number;
   savings: number;
   reason: string;
+  priority: "high" | "medium" | "low";
 }
 
 export interface AuditOutput {
   results: ToolResult[];
   totalMonthlySavings: number;
   totalAnnualSavings: number;
+  totalCurrentSpend: number;
   showCredexCTA: boolean;
   spendingWell: boolean;
+  lowSavingsFound: boolean;
   spendScore: number;
+  summaryHints: string[];
 }
 
 export type AuditRequest = AuditFormData;

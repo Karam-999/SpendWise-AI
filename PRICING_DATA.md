@@ -92,7 +92,7 @@ All pricing verified against official vendor pages. Prices are per-user/month un
 
 ## API Pricing (Pay-as-you-go)
 
-OpenAI API and Anthropic API are usage-based (per-token). The audit engine flags API spend **over $20/mo** as candidates for flat-plan alternatives (ChatGPT Plus or Claude Pro at $20/mo) where the subscription gives generous usage at a predictable, lower cost.
+OpenAI API and Anthropic API are usage-based (per-token). The audit engine flags any API spend as candidates for discounted credits through SpendWise, as an API user cannot simply downgrade to a chat interface. This typically yields ~45% savings.
 
 ## What the audit engine uses
 

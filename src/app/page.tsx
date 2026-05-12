@@ -156,7 +156,7 @@ export default function HomePage() {
       ) : (
         <>
           <TrustStrip />
-          <Hero onAuditClick={scrollToForm} />
+          <Hero onAuditClick={scrollToForm} onBuyClick={() => { setShowBuyForm(true); setShowSellForm(false); }} />
           <HowItWorks />
           <Platforms />
       
@@ -191,19 +191,12 @@ export default function HomePage() {
                     </select>
                   </div>
                 </div>
-                <div className="flex flex-col gap-6 mb-6">
-                  {Object.entries(TOOL_CATEGORIES).map(([category, toolNames]) => (
-                    <div key={category}>
-                      <p className="text-[11px] font-medium text-neutral-500 uppercase tracking-[0.1em] mb-2">{category}</p>
-                      <div className="flex flex-col gap-2">
-                        {toolNames.map((tn) => {
-                          const tool = formData.tools.find((t) => t.tool === tn);
-                          if (!tool) return null;
-                          return <ToolCard key={tn} tool={tool} planOptions={PLAN_OPTIONS[tn]} onUpdate={(u) => updateTool(tn, u)} />;
-                        })}
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex flex-col gap-2 mb-6">
+                  {ALL_TOOLS.map((tn) => {
+                    const tool = formData.tools.find((t) => t.tool === tn);
+                    if (!tool) return null;
+                    return <ToolCard key={tn} tool={tool} planOptions={PLAN_OPTIONS[tn]} onUpdate={(u) => updateTool(tn, u)} />;
+                  })}
                 </div>
                 {activeCount > 0 && (
                   <div className="mb-4 rounded-md border border-neutral-200 bg-neutral-50 px-4 py-3 flex items-center justify-between text-sm">

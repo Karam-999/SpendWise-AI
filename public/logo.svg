@@ -32,7 +32,7 @@
       <path class="cube-right" d="M30 30 L30 60 L60 45 L60 15 Z"/>
 
       <!-- GitHub icon: path in 16×16 space, positioned & rotated on top face -->
-      <g transform="translate(362, 75) scale(1)">
+      <g transform="translate(300, 80) scale(1.5)">
         <path fill="#000000"
           d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59
              .4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49
@@ -47,9 +47,8 @@
              0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38
              A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
       </g>
-        <text x="383" y="89" fill="#00000" font-family="Arial" font-weight="bold" font-size="12">Karam-999</text>
+        <text x="330" y="99" fill="#00000" font-family="Arial" font-weight="bold" font-size="23">Karam-999</text>
     </g>
-
   </g>
 
   <!-- SpendWise text -->

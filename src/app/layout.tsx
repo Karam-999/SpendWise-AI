@@ -15,9 +15,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SpendWise — AI Spend Audit",
+  title: "SpendWise",
   description:
-    "Free tool that audits your AI tool stack and finds real savings. No signup required. Built for engineering teams.",
+    "Free tool that audits your AI tool stack and finds real savings. Buy and Sell AI Credits. No signup required.",
 };
 
 export default function RootLayout({
