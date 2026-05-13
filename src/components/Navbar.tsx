@@ -14,7 +14,7 @@ export default function Navbar({ onAuditClick, setShowBuyForm, setShowSellForm  
 
   return (
     <nav className="border-b border-neutral-200 bg-white/80 backdrop-blur-sm sticky top-0 z-50 p-3">
-      <div className="mx-auto max-w-6xl px-4 lg:px-6 flex items-center justify-between h-16">
+      <div className="mx-auto max-w-6xl px-4 lg:px-6 flex items-center justify-between h-12">
         <a href="/" className="flex items-center shrink-0 mr-4" onClick={handleNavClick}>
           <Image 
             src="/logo.svg" 
