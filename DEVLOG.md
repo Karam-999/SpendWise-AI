@@ -140,10 +140,12 @@ did not  see the message for this assignment
 - Rewrote `ARCHITECTURE.md` to include all 4 required sections: Mermaid system diagram, Mermaid sequence diagram for data flow, stack justification table, and scaling analysis for 10k audits/day. The previous version only had the audit engine rules and folder structure.
 - Added the Resend verified domain issue to `REFLECTION.md` as a real bug I hit. Resend's free tier only sends from verified custom domains, which blocked production email delivery.
 - Added a YouTube demo video link to `README.md`.
+- Fixed GitHub Actions CI lint errors: replaced `<a href="/">` with `<Link>` from next/link in `client.tsx` and `Navbar.tsx`, fixed `setState` called synchronously inside `useEffect` in `client.tsx` and `page.tsx`, and removed unused imports/variables in `Guarantee.tsx`, `Hero.tsx`, and `LeadForms.tsx`. CI is now passing green.
 
 **What I learned:**
 - The assignment rubric weighs entrepreneurial files as heavily as code (25 points). Spending time polishing documentation is not wasted effort.
 - Mermaid diagrams render inline on GitHub, which makes the architecture doc much more useful for reviewers.
+- Next.js strict lint rules flag `<a>` tags for internal navigation and `setState` inside effects. Using lazy `useState` initializers and `<Link>` components is the correct pattern.
 
 **Blockers / what I'm stuck on:**
-- No blockers. Final review and submission.
+- No blockers. CI is green. Final review and submission.
