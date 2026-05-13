@@ -39,14 +39,14 @@ export async function sendAuditEmail(
       ? `With over $500/mo in savings potential, a Credex advisor will reach out within 24 hours to help you capture these savings through discounted AI credits.`
       : ``,
     ``,
-    `—SpendWise-AI\n Karam`,
+    `—SpendWise\n Karam`,
   ]
     .filter(Boolean)
     .join("\n");
 
   try {
     await resend.emails.send({
-      from: "SpendWise-AI <onboarding@resend.dev>",
+      from: "SpendWise <onboarding@resend.dev>",
       to: email,
       subject: totalSavings > 0
         ? `Your AI audit: save $${totalSavings}/mo`
@@ -91,7 +91,7 @@ export async function notifyAdminOfMarketplaceLead(
 
   try {
     await resend.emails.send({
-      from: "SpendWise-AI Marketplace <onboarding@resend.dev>",
+      from: "SpendWise Marketplace <onboarding@resend.dev>",
       to: adminEmail,
       subject: `New ${lead.mode.toUpperCase()} Request: ${lead.company} (${lead.fullName})`,
       text,

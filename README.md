@@ -2,17 +2,39 @@
 
 SpendWise is a free AI infrastructure spend optimization tool that audits your AI and cloud tool stack against verified vendor pricing, surfaces overspend, and recommends concrete actions to save money. Built for startup founders and engineering managers who pay for tools like Cursor, Copilot, Claude, ChatGPT, Gemini, and Windsurf but have no benchmark for whether they're overspending.
 
-**Live:** [https://spendwise-ai.vercel.app](https://spendwise-ai.vercel.app)
+**Live:** [https://spendwise-ai-test.vercel.app/](https://spendwise-ai-test.vercel.app/)
 
 ---
 
 ## Screenshots
 
-> _Replace with actual screenshots or a Loom recording link before submission_
+Coming soon....
+---
 
-1. **Landing Page** — Hero with floating tool icons, trust strip, and audit CTA
-2. **Audit Form** — Toggle tools on/off, select plan, enter spend & seats
-3. **Results Page** — Per-tool breakdown, AI Spend Score, Groq-generated summary, lead capture
+## Quick Start
+
+```bash
+# Clone
+git clone https://github.com/Karam-999/SpendWise-AI.git
+cd SpendWise-AI
+
+# Install
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Fill in: GROQ_API_KEY, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,
+# SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY, NEXT_PUBLIC_BASE_URL
+
+# Run locally
+npm run dev        # → http://localhost:3000
+
+# Run tests
+npm test           # runs vitest
+
+# Deploy
+vercel --prod      # or push to main for auto-deploy
+```
 
 ---
 
