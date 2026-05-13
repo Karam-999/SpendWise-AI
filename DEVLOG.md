@@ -119,3 +119,14 @@ did not  see the message for this assignment
 
 **Plan for tomorrow:**
 - Final polishing, debugging, review and submission.
+
+## Day 7 : 12-05-2026
+
+**Hours worked:** 4
+
+**What I did:**
+- Fixed the navbar logo sizing bug where `h-24 lg:h-12` on a `hidden lg:block` element was being overridden by the responsive class.
+- Final review of all required files against the submission checklist.
+
+**Blockers / what I'm stuck on:**
+- No blockers. All required files are complete. Ready for final deployment and submission.

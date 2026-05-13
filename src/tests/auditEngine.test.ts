@@ -20,7 +20,7 @@ function makeForm(tools: ToolInput[], teamSize = 5, useCase: AuditFormData["useC
 describe("auditEngine", () => {
   it("recommends downgrade when team plan is used by 1 user", () => {
     const form = makeForm([
-      makeTool({ tool: "cursor", plan: "business", monthlySpend: 40, seats: 1 }),
+      makeTool({ tool: "cursor", plan: "teams", monthlySpend: 40, seats: 1 }),
     ]);
 
     const output = auditEngine(form);
@@ -135,10 +135,10 @@ describe("auditEngine", () => {
     expect(dropRec!.savings).toBe(20);
   });
 
-  it("ignores tools with 0 seats", () => {
+  it("ignores inactive tools", () => {
     const form = makeForm([
-      makeTool({ tool: "cursor", plan: "business", monthlySpend: 40, seats: 0 }),
-      makeTool({ tool: "github_copilot", plan: "enterprise", monthlySpend: 390, seats: 0 }),
+      makeTool({ tool: "cursor", plan: "teams", monthlySpend: 40, seats: 1, active: false }),
+      makeTool({ tool: "github_copilot", plan: "enterprise", monthlySpend: 390, seats: 10, active: false }),
     ]);
 
     const output = auditEngine(form);

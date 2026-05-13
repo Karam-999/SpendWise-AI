@@ -14,14 +14,14 @@ export default function Navbar({ onAuditClick, setShowBuyForm, setShowSellForm  
 
   return (
     <nav className="border-b border-neutral-200 bg-white/80 backdrop-blur-sm sticky top-0 z-50 p-3">
-      <div className="mx-auto max-w-6xl px-4 lg:px-6 flex items-center justify-between h-14">
+      <div className="mx-auto max-w-6xl px-4 lg:px-6 flex items-center justify-between h-16">
         <a href="/" className="flex items-center shrink-0 mr-4" onClick={handleNavClick}>
           <Image 
             src="/logo.svg" 
             alt="SpendWise" 
             width={480} 
             height={480} 
-            className="h-24 lg:h-12 w-auto object-contain hidden lg:block" 
+            className="h-20 w-auto object-contain hidden lg:block" 
             priority
           />
           <Image 
