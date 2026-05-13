@@ -2,10 +2,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Navbar({ onAuditClick, setShowBuyForm, setShowSellForm  }: { onAuditClick: () => void, setShowBuyForm: (show: boolean) => void, setShowSellForm: (show: boolean) => void  }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 1024px)");
+    const handler = () => { if (mql.matches) setIsMobileMenuOpen(false); };
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
 
   const handleNavClick = () => {
     setShowBuyForm(false);

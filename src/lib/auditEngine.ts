@@ -40,7 +40,7 @@ const PRICING = {
   },
 } as const;
 
-const CREDEX_CTA_THRESHOLD = 500;
+const CONSULTATION_THRESHOLD = 500;
 const WELL_OPTIMISED_THRESHOLD = 100;
 
 const CODING_TOOLS: string[] = ["cursor", "github_copilot", "windsurf"];
@@ -195,7 +195,7 @@ function evaluateTool(
       const newSpend = tool.monthlySpend - savings;
       return {
         ...base,
-        recommendedAction: "Buy discounted OpenAI API credits via Credex",
+        recommendedAction: "Buy discounted OpenAI API credits via SpendWise",
         newSpend,
         savings,
         priority: toPriority(savings),
@@ -226,7 +226,7 @@ function evaluateTool(
       const newSpend = tool.monthlySpend - savings;
       return {
         ...base,
-        recommendedAction: "Buy discounted Anthropic API credits via Credex",
+        recommendedAction: "Buy discounted Anthropic API credits via SpendWise",
         newSpend,
         savings,
         priority: toPriority(savings),
@@ -435,7 +435,7 @@ export function auditEngine(input: AuditFormData): AuditOutput {
   const totalCurrentSpend    = activeTools.reduce((sum, t) => sum + t.monthlySpend, 0);
   const spendScore           = calculateSpendScore(totalCurrentSpend, totalMonthlySavings);
 
-  const showCredexCTA = totalMonthlySavings >= CREDEX_CTA_THRESHOLD;
+  const showConsultationCTA = totalMonthlySavings >= CONSULTATION_THRESHOLD;
 
   const spendingWell     = savingsResults.length === 0;
   const lowSavingsFound  = !spendingWell && totalMonthlySavings < WELL_OPTIMISED_THRESHOLD;
@@ -453,7 +453,7 @@ export function auditEngine(input: AuditFormData): AuditOutput {
     totalAnnualSavings,
     totalCurrentSpend,
     spendScore,
-    showCredexCTA,
+    showConsultationCTA,
     spendingWell,
     lowSavingsFound,
     summaryHints,

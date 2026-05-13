@@ -42,7 +42,7 @@ export interface AuditOutput {
   totalMonthlySavings: number;
   totalAnnualSavings: number;
   totalCurrentSpend: number;
-  showCredexCTA: boolean;
+  showConsultationCTA: boolean;
   spendingWell: boolean;
   lowSavingsFound: boolean;
   spendScore: number;

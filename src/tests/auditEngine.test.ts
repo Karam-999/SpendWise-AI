@@ -48,7 +48,7 @@ describe("auditEngine", () => {
     expect(dropRec!.savings).toBe(10);
   });
 
-  it("sets showCredexCTA to true when savings exceed $500/mo", () => {
+  it("sets showConsultationCTA to true when savings exceed $500/mo", () => {
     const form = makeForm(
       [
         makeTool({ tool: "github_copilot", plan: "enterprise", monthlySpend: 780, seats: 20 }),
@@ -61,7 +61,7 @@ describe("auditEngine", () => {
     const output = auditEngine(form);
 
     expect(output.totalMonthlySavings).toBeGreaterThan(500);
-    expect(output.showCredexCTA).toBe(true);
+    expect(output.showConsultationCTA).toBe(true);
   });
 
   it("returns spendingWell true when all tools are optimal", () => {

@@ -36,7 +36,7 @@ export async function sendAuditEmail(
       : `Your AI stack looks well-optimized — no significant savings found.`,
     ``,
     highSavings
-      ? `With over $500/mo in savings potential, a Credex advisor will reach out within 24 hours to help you capture these savings through discounted AI credits.`
+      ? `With over $500/mo in savings potential, a SpendWise advisor will reach out within 24 hours to help you capture these savings through discounted AI credits.`
       : ``,
     ``,
     `—SpendWise\n Karam`,

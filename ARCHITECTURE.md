@@ -14,7 +14,7 @@ graph TB
     subgraph API["Next.js API Routes (Vercel Edge)"]
         AuditAPI["/api/audit"]
         LeadsAPI["/api/leads"]
-        SummaryAPI["/api/summary/[id]"]
+        SummaryAPI["/api/summary/:id"]
     end
 
     subgraph Core["Core Logic"]
@@ -38,7 +38,7 @@ graph TB
     LeadsAPI -->|INSERT lead row| Supabase
     LeadsAPI -->|send confirmation| Resend
 
-    Results -->|GET /api/summary/[id]| SummaryAPI
+    Results -->|GET summary| SummaryAPI
     SummaryAPI -->|fetch audit data| Supabase
     SummaryAPI -->|generate summary| Groq
     SummaryAPI -->|100-word paragraph| Results
@@ -67,7 +67,7 @@ sequenceDiagram
     Note over Engine: Rule 4: Unpredictable API spend
     Note over Engine: Rule 5: Redundant coding tools
     Note over Engine: Rule 6: Redundant chat tools
-    Engine-->>API: { recommendations[], totalSavings, spendScore, showCredexCTA }
+    Engine-->>API: { recommendations[], totalSavings, spendScore, showConsultationCTA }
 
     API->>DB: INSERT INTO audits (id, input, result)
     DB-->>API: audit row with UUID

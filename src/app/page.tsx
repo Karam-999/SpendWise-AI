@@ -107,7 +107,6 @@ export default function HomePage() {
   const [showBuyForm, setShowBuyForm] = useState(false);
   const [showSellForm, setShowSellForm] = useState(false);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { if (!hydrated) setHydrated(true); }, [hydrated]);
 
   useEffect(() => {

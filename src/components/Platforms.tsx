@@ -24,7 +24,7 @@ export default function Platforms() {
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {PLATFORMS.map((p) => (
             <div key={p.name} className="border border-neutral-700 pl-4 rounded-xl px-2 py-5 bg-neutral-800/50 hover:bg-neutral-800 transition-colors">
               <div className="h-10 w-auto align-left flex items-center rounded-lg  mb-3">
@@ -37,7 +37,7 @@ export default function Platforms() {
           ))}
         </div>
         <div className="mt-8 rounded-xl border border-neutral-700 bg-neutral-800/30 p-6 text-center">
-          <div className="flex flex-col items-center justify-center ">
+          <div className="flex flex-col items-center justify-center">
             <p className="text-sm text-neutral-300 font-medium">Same platforms you already use, no infrastructure changes</p>
             <p className="text-xs text-neutral-500 mt-1">All pricing data sourced from official vendor pages and verified weekly</p>
           </div>

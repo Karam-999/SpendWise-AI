@@ -41,7 +41,7 @@ Based on this audit data: ${JSON.stringify(results)}
 Write a personalized summary.
 ```
 
-**Problem:** The model would sometimes repeat parts of the JSON, reference internal field names like `showCredexCTA`, or produce unstructured output. One response started with "Based on the provided JSON data..." which is useless for a user-facing summary.
+**Problem:** The model would sometimes repeat parts of the JSON, reference internal field names like `showConsultationCTA`, or produce unstructured output. One response started with "Based on the provided JSON data..." which is useless for a user-facing summary.
 
 **Fix:** Switched to formatted, labeled data with explicit field descriptions. This gave the model context without exposing implementation details.
 

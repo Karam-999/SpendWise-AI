@@ -24,9 +24,9 @@ export default function Guarantee() {
               so the same input always produces the same output. No AI hallucinations in the calculations.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
             {guarantees.map((item, idx) => (
-              <div key={item.title} className={`border border-neutral-200 rounded-xl p-5 bg-white ${guarantees.length === 5 && idx === 4 ? 'col-span-1 sm:col-span-2' : 'col-span-1 justify-center items-center'}`}>
+              <div key={item.title} className={`border border-neutral-200 rounded-xl p-5 bg-white ${guarantees.length === 5 && idx === 4 ? 'col-span-2 sm:col-span-2 justify-center items-center' : 'col-span-1 justify-center items-center'}`}>
                 <div className="flex items-baseline justify-start gap-2">
                 <div className="h-2 w-2 rounded-full bg-emerald-500" />
                 <h3 className="text-sm font-semibold text-neutral-900 mb-1">{item.title}</h3>

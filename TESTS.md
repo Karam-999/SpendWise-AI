@@ -23,7 +23,7 @@ npx vitest
 |---|---|---|
 | 1 | recommends downgrade when team plan is used by 1 user | **Rule 1 (Small Team Downgrades):** Cursor Business plan with 1 seat -> recommends Cursor Pro, expects $20 savings |
 | 2 | recommends dropping one tool when Cursor + Copilot are both active | **Rule 5 (Redundant Coding Tools):** Two coding assistants active -> drops the cheaper one (Copilot at $10/mo) |
-| 3 | sets showCredexCTA to true when savings exceed $500/mo | **Credex CTA threshold:** Copilot Enterprise (20 seats) + Gemini Ultra -> total savings > $500, `showCredexCTA` must be true |
+| 3 | sets showConsultationCTA to true when savings exceed $500/mo | **Consultation CTA threshold:** Copilot Enterprise (20 seats) + Gemini Ultra -> total savings > $500, `showConsultationCTA` must be true |
 | 4 | returns spendingWell true when all tools are optimal | **Happy path / no waste:** Single Cursor Pro user -> no recommendations, `spendingWell: true`, `spendScore: 100` |
 | 5 | recommends discounted credits when OpenAI API is used | **Rule 4b (High API Spend):** $100/mo OpenAI API -> recommends buying discounted credits, expects $45 savings (45%) |
 | 6 | recommends discounted credits when Anthropic API is used | **Rule 4b (High API Spend):** $100/mo Anthropic API -> same 45% discount recommendation |
