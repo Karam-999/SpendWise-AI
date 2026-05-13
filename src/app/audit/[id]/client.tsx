@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import LeadCaptureForm from "@/components/LeadCaptureForm";
 import LeadForms from "@/components/LeadForms";
@@ -44,26 +45,33 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
   const [showBuyForm, setShowBuyForm] = useState(false);
   const [showSellForm, setShowSellForm] = useState(false);
 
+  const hasRestoredRef = useRef(false);
   useEffect(() => {
-    if (output) return;
+    if (output || hasRestoredRef.current) return;
+    hasRestoredRef.current = true;
     const cached = sessionStorage.getItem(`audit-${auditId}`);
     if (cached) {
       try {
-        setOutput(JSON.parse(cached) as AuditOutput);
+        const parsed = JSON.parse(cached) as AuditOutput;
+        queueMicrotask(() => setOutput(parsed));
       } catch {}
     }
   }, [auditId, output]);
 
   useEffect(() => {
     if (!output || summary) return;
-    setSummaryLoading(true);
-    fetch(`/api/summary/${auditId}`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.summary) setSummary(data.summary);
-      })
-      .catch(() => {})
-      .finally(() => setSummaryLoading(false));
+    let cancelled = false;
+    const fetchSummary = async () => {
+      try {
+        const res = await fetch(`/api/summary/${auditId}`);
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (!cancelled && data?.summary) setSummary(data.summary);
+      } catch {}
+    };
+    queueMicrotask(() => setSummaryLoading(true));
+    fetchSummary().finally(() => { if (!cancelled) queueMicrotask(() => setSummaryLoading(false)); });
+    return () => { cancelled = true; };
   }, [auditId, output, summary]);
 
   const handleCopy = () => {
@@ -80,9 +88,9 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
           <p className="text-sm text-muted-foreground mb-4">
             This audit may have expired or the link is invalid.
           </p>
-          <a href="/" className="text-sm underline underline-offset-4 hover:text-foreground transition-colors">
+          <Link href="/" className="text-sm underline underline-offset-4 hover:text-foreground transition-colors">
             Run a new audit →
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -94,7 +102,7 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
     <div className="flex flex-col flex-1 bg-background">
       <main className="mx-auto w-full max-w-2xl px-4 py-12 sm:px-6 sm:py-16">
         <div className="flex items-center justify-between mb-10">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -102,7 +110,7 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
             New audit
-          </a>
+          </Link>
           <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
             Audit report
           </p>

@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
-export default function Hero({ onAuditClick, onBuyClick }: { onAuditClick: () => void, onBuyClick?: () => void }) {
+export default function Hero({ onAuditClick, onBuyClick: _onBuyClick }: { onAuditClick: () => void, onBuyClick?: () => void }) {
   return (
     <section className="relative bg-white border-b border-neutral-200 overflow-hidden min-h-[600px] flex items-center justify-center pt-16 sm:pt-10 pb-24 sm:pb-32">
       <div className="absolute inset-0 z-0 h-full w-full bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>

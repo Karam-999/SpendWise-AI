@@ -18,13 +18,13 @@ graph TB
     end
 
     subgraph Core["Core Logic"]
-        Engine["auditEngine.ts — Deterministic Rules"]
+        Engine["auditEngine.ts - Deterministic Rules"]
     end
 
     subgraph External["External Services"]
         Supabase["Supabase (Postgres)"]
         Groq["Groq API (Llama 3)"]
-        Resend["Nodemailer (Gmail SMTP)"]
+        Resend["Resend (Email)"]
     end
 
     LP --> Form
@@ -46,7 +46,7 @@ graph TB
     Share -->|SSR with OG tags| Supabase
 ```
 
-## Data Flow: Input → Audit Result
+## Data Flow: Input -> Audit Result
 
 ```mermaid
 sequenceDiagram
@@ -94,12 +94,12 @@ Here is exactly how it computes the advice:
 
 | Choice | Why |
 |---|---|
-| **Next.js 15 (App Router)** | Server-side rendering for the shareable audit pages gives proper Open Graph meta tags — critical for the viral loop. API routes colocate backend logic without a separate server. Vercel deploys in seconds. |
+| **Next.js 15 (App Router)** | Server-side rendering for the shareable audit pages gives proper Open Graph meta tags, critical for the viral loop. API routes colocate backend logic without a separate server. Vercel deploys in seconds. |
 | **TypeScript** | The audit engine has complex branching logic across tool types and pricing tiers. Static types catch mismatches (e.g., passing a `string` where a `number` is expected for spend) before they become wrong savings calculations shown to users. |
-| **Supabase (Postgres)** | Free tier covers the MVP easily. Row-level security is available if needed later. Direct SQL access for analytics. Chose over Firebase because audit data is relational (audits → leads is a natural FK relationship). |
-| **Groq API (Llama 3)** | Fastest inference for the AI summary feature — sub-second responses vs. 3-5s from OpenAI/Anthropic. Free tier is generous. The summary is non-critical (templated fallback exists), so using a fast/cheap provider is the right trade-off. |
-| **Nodemailer (Gmail SMTP)** | Switched from Resend SDK mid-week because Resend's free tier required domain verification that added friction. Gmail SMTP works immediately for the MVP's transactional emails. Would switch to a dedicated provider (Postmark/SES) at scale. |
-| **shadcn/ui** | Accessible, unstyled primitives that don't fight custom design. No runtime CSS overhead like MUI. Components are copied into the repo — no version lock-in. |
+| **Supabase (Postgres)** | Free tier covers the MVP easily. Row-level security is available if needed later. Direct SQL access for analytics. Chose over Firebase because audit data is relational (audits -> leads is a natural FK relationship). |
+| **Groq API (Llama 3)** | Fastest inference for the AI summary feature, sub-second responses vs. 3-5s from OpenAI/Anthropic. Free tier is generous. The summary is non-critical (templated fallback exists), so using a fast/cheap provider is the right trade-off. |
+| **Resend** | for email sending. |
+| **shadcn/ui** | Accessible, unstyled primitives that don't fight custom design. No runtime CSS overhead like MUI. Components are copied into the repo, no version lock-in. |
 | **Vitest** | Near-instant test execution. Compatible with TypeScript out of the box. The audit engine tests run in <500ms, which keeps CI fast. |
 
 ## What I'd Change at 10,000 Audits/Day
@@ -111,16 +111,16 @@ At ~10k audits/day (~7 per minute), the current architecture would hit several b
 - **At scale:** Add connection pooling (PgBouncer, already available in Supabase). Add an index on `audits.created_at` for analytics queries. Consider partitioning the audits table by month if historical data grows large.
 
 ### Audit Engine
-- **Now:** Runs synchronously in the API route. Pure function, no I/O — fast enough.
-- **At scale:** Still fine — it's a pure CPU function with no external calls. The bottleneck is never the engine itself. If pricing rules grow complex, extract them into a config file rather than hardcoded conditionals.
+- **Now:** Runs synchronously in the API route. Pure function, no I/O, fast enough.
+- **At scale:** Still fine, it's a pure CPU function with no external calls. The bottleneck is never the engine itself. If pricing rules grow complex, extract them into a config file rather than hardcoded conditionals.
 
 ### AI Summary
 - **Now:** One Groq API call per audit view. If Groq is down, falls back to a template.
-- **At scale:** Cache generated summaries in the database after first generation. 10k audits/day × one summary each = 10k API calls/day. With caching, repeat views (shared URLs) hit zero API calls. Add a queue (Inngest or Vercel Cron) for batch generation if latency spikes.
+- **At scale:** Cache generated summaries in the database after first generation. 10k audits/day x one summary each = 10k API calls/day. With caching, repeat views (shared URLs) hit zero API calls. Add a queue (Inngest or Vercel Cron) for batch generation if latency spikes.
 
 ### Email
 - **Now:** Gmail SMTP, ~500/day limit.
-- **At scale:** Immediately switch to a transactional email provider — Postmark ($1.25/1k emails) or AWS SES ($0.10/1k). Add a dead-letter queue for failed sends. Rate-limit to prevent abuse.
+- **At scale:** Immediately switch to a transactional email provider like Postmark ($1.25/1k emails) or AWS SES ($0.10/1k). Add a dead-letter queue for failed sends. Rate-limit to prevent abuse.
 
 ### Infrastructure
 - **Now:** Single Vercel deployment, serverless functions.
@@ -128,7 +128,7 @@ At ~10k audits/day (~7 per minute), the current architecture would hit several b
 
 ### Monitoring
 - **Now:** Console logs and Vercel's built-in analytics.
-- **At scale:** Add Sentry for error tracking, PostHog for product analytics (funnel: audit completed → email captured → consultation booked), and Supabase's pg_stat_statements for slow query detection.
+- **At scale:** Add Sentry for error tracking, PostHog for product analytics (funnel: audit completed -> email captured -> consultation booked), and Supabase's pg_stat_statements for slow query detection.
 
 ## Folder Structure
 
@@ -147,7 +147,7 @@ At ~10k audits/day (~7 per minute), the current architecture would hit several b
     *   `LeadCaptureForm.tsx`: The form component for capturing emails on the results page. Includes a honeypot field for bot/spam protection.
 *   **`lib/`**
     *   `auditEngine.ts`: The core business logic for calculating savings (described above).
-    *   `email.ts`: Helper to send transactional emails using Nodemailer via Gmail SMTP.
+    *   `email.ts`: Helper to send transactional emails using Resend.
     *   `groq.ts`: Helper to interface with the Groq API for AI summaries, including a fallback template if the API fails or the key is missing.
     *   `supabase.ts`: Supabase client initialization (lazy-loaded to prevent Next.js build errors if environment variables are missing).
     *   `types.ts`: TypeScript interfaces used across the entire application.

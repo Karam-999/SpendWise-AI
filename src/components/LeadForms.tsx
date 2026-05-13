@@ -17,7 +17,7 @@ const PLATFORM_OPTIONS = [
   "GitHub Copilot",
 ];
 
-export default function LeadForms({ auditId, mode }: LeadFormsProps) {
+export default function LeadForms({ auditId: _auditId, mode }: LeadFormsProps) {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",

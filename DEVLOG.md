@@ -131,3 +131,19 @@ did not  see the message for this assignment
 **Blockers / what I'm stuck on:**
 - No blockers. All required files are complete. Ready for final deployment and submission.
 
+## Day 8 : 13-05-2026
+
+**Hours worked:** 3
+
+**What I did:**
+- Wrote all the required documentation files: `REFLECTION.md`, `GTM.md`, `ECONOMICS.md`, `METRICS.md`, `LANDING_COPY.md`, `USER_INTERVIEWS.md`, and `TESTS.md`.
+- Rewrote `ARCHITECTURE.md` to include all 4 required sections: Mermaid system diagram, Mermaid sequence diagram for data flow, stack justification table, and scaling analysis for 10k audits/day. The previous version only had the audit engine rules and folder structure.
+- Added the Resend verified domain issue to `REFLECTION.md` as a real bug I hit. Resend's free tier only sends from verified custom domains, which blocked production email delivery.
+- Added a YouTube demo video link to `README.md`.
+
+**What I learned:**
+- The assignment rubric weighs entrepreneurial files as heavily as code (25 points). Spending time polishing documentation is not wasted effort.
+- Mermaid diagrams render inline on GitHub, which makes the architecture doc much more useful for reviewers.
+
+**Blockers / what I'm stuck on:**
+- No blockers. Final review and submission.

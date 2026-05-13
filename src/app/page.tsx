@@ -83,14 +83,8 @@ function ToolCard({ tool, planOptions, onUpdate }: { tool: ToolInput; planOption
 export default function HomePage() {
   const router = useRouter();
   const formRef = useRef<HTMLDivElement>(null);
-  const [formData, setFormData] = useState<AuditFormData>(createDefaultFormData);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hydrated, setHydrated] = useState(false);
-  const [showBuyForm, setShowBuyForm] = useState(false);
-  const [showSellForm, setShowSellForm] = useState(false);
-
-  useEffect(() => {
+  const [formData, setFormData] = useState<AuditFormData>(() => {
+    if (typeof window === "undefined") return createDefaultFormData();
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
@@ -102,11 +96,19 @@ export default function HomePage() {
           const idx = merged.tools.findIndex((t) => t.tool === savedTool.tool);
           if (idx !== -1) merged.tools[idx] = { ...merged.tools[idx], ...savedTool };
         }
-        setFormData(merged);
+        return merged;
       }
     } catch {}
-    setHydrated(true);
-  }, []);
+    return createDefaultFormData();
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [hydrated, setHydrated] = useState(() => typeof window !== "undefined");
+  const [showBuyForm, setShowBuyForm] = useState(false);
+  const [showSellForm, setShowSellForm] = useState(false);
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { if (!hydrated) setHydrated(true); }, [hydrated]);
 
   useEffect(() => {
     if (!hydrated) return;

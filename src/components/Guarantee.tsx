@@ -1,6 +1,5 @@
 "use client";
 
-import { title } from "process";
 
 const guarantees = [
   { title: "Deterministic Audit rules", desc: "No AI guesswork in the audit logic. Six explainable rules with clear reasoning." },
