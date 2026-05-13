@@ -68,6 +68,7 @@ hCaptcha adds friction to the user flow and a third-party dependency. A honeypot
 | Database | Supabase |
 | AI Summary | Groq API (llama3-70b-8192) |
 | Deploy | Vercel |
+| Email | Resend |
 | CI | GitHub Actions (lint + vitest) |
 | Testing | Vitest (8 tests) |
 

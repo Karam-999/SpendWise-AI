@@ -103,11 +103,11 @@ export default function HomePage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [hydrated, setHydrated] = useState(() => typeof window !== "undefined");
+  const [hydrated, setHydrated] = useState(false);
   const [showBuyForm, setShowBuyForm] = useState(false);
   const [showSellForm, setShowSellForm] = useState(false);
 
-  useEffect(() => { if (!hydrated) setHydrated(true); }, [hydrated]);
+  useEffect(() => { requestAnimationFrame(() => setHydrated(true)); }, []);
 
   useEffect(() => {
     if (!hydrated) return;
