@@ -63,7 +63,6 @@ export default function Navbar({ onAuditClick, setShowBuyForm, setShowSellForm  
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="lg:hidden border-t mt-2 border-neutral-200 bg-white">
           <div className="flex flex-col px-4 py-6 space-y-4">

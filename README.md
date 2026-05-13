@@ -6,35 +6,9 @@ SpendWise is a free AI infrastructure spend optimization tool that audits your A
 
 ---
 
-## Screenshots
+## Youtube Video
 
-Coming soon....
----
-
-## Quick Start
-
-```bash
-# Clone
-git clone https://github.com/Karam-999/SpendWise-AI.git
-cd SpendWise-AI
-
-# Install
-npm install
-
-# Set up environment variables
-cp .env.example .env.local
-# Fill in: GROQ_API_KEY, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY,
-# SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY, NEXT_PUBLIC_BASE_URL
-
-# Run locally
-npm run dev        # → http://localhost:3000
-
-# Run tests
-npm test           # runs vitest
-
-# Deploy
-vercel --prod      # or push to main for auto-deploy
-```
+[![SpendWise Demo](https://img.youtube.com/vi/8WYTR5WF3qQ/hqdefault.jpg)](https://youtu.be/8WYTR5WF3qQ)
 
 ---
 

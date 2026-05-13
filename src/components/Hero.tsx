@@ -5,30 +5,24 @@ import Image from "next/image";
 export default function Hero({ onAuditClick, onBuyClick }: { onAuditClick: () => void, onBuyClick?: () => void }) {
   return (
     <section className="relative bg-white border-b border-neutral-200 overflow-hidden min-h-[600px] flex items-center justify-center pt-16 sm:pt-10 pb-24 sm:pb-32">
-      {/* Grid Background */}
       <div className="absolute inset-0 z-0 h-full w-full bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
 
-      {/* Floating Icons */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block">
-        {/* Gemini */}
         <div className="absolute top-20 left-[12%] rotate-[-12deg] bg-white p-4 rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-neutral-100 animate-[float_6s_ease-in-out_infinite]">
           <Image src="/gemini-color.svg" alt="Gemini" width={48} height={48} className="w-12 h-12 object-contain" />
         </div>
         <div className="absolute top-[45%] left-[5%] rotate-[-5deg] bg-white p-4 rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-neutral-100 animate-[float_6s_ease-in-out_infinite]">
           <Image src="/windsurf.svg" alt="Windsurf" width={48} height={48} className="w-12 h-12 object-contain" />
         </div>
-        {/* Claude */}
         <div className="absolute bottom-24 left-[15%] rotate-[18deg] bg-white p-4 rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-neutral-100 animate-[float_7s_ease-in-out_infinite_1s]">
           <Image src="/claude-color.svg" alt="Claude" width={48} height={48} className="w-12 h-12 object-contain" />
         </div>
-        {/* Cursor */}
         <div className="absolute top-24 right-[12%] rotate-[15deg] bg-white p-4 rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-neutral-100 animate-[float_8s_ease-in-out_infinite_2s]">
           <Image src="/cursor.svg" alt="Cursor" width={48} height={48} className="w-12 h-12 object-contain" style={{ filter: "brightness(0) saturate(100%) invert(0%)" }} />
         </div>
         <div className="absolute top-[40%] right-[5%] rotate-[15deg] bg-white p-4 rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-neutral-100 animate-[float_8s_ease-in-out_infinite_2s]">
           <Image src="/copilot-icon.svg" alt="Copilot" width={48} height={48} className="w-12 h-12 object-contain" />
         </div>
-        {/* OpenAI */}
         <div className="absolute bottom-32 right-[18%] rotate-[-15deg] bg-white p-4 rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-neutral-100 animate-[float_6s_ease-in-out_infinite_1.5s]">
           <Image src="/openai.svg" alt="OpenAI" width={48} height={48} className="w-12 h-12 object-contain" />
         </div>

@@ -48,7 +48,7 @@ export default function LeadForms({ auditId, mode }: LeadFormsProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode,
-          fullName: formData.fullName, // Hidden field for tracking
+          fullName: formData.fullName,
           email: formData.email,
           company: formData.company,
           phone: formData.phone,

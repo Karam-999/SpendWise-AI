@@ -12,7 +12,7 @@ export default function LeadCaptureForm({ auditId, hasSavings = true }: LeadCapt
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
-  const [website, setWebsite] = useState(""); // Hidden field for tracking
+  const [website, setWebsite] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 

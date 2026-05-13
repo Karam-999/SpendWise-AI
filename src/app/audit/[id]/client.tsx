@@ -93,7 +93,6 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
   return (
     <div className="flex flex-col flex-1 bg-background">
       <main className="mx-auto w-full max-w-2xl px-4 py-12 sm:px-6 sm:py-16">
-        {/* Navigation */}
         <div className="flex items-center justify-between mb-10">
           <a
             href="/"
@@ -109,7 +108,6 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
           </p>
         </div>
 
-        {/* Savings Hero */}
         <div className="mb-10">
           {output.spendingWell ? (
             <div className="rounded-md border border-emerald-200 bg-emerald-50/60 p-6">
@@ -148,7 +146,6 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
           )}
         </div>
 
-        {/* Spend Score */}
         <div className="mb-10 rounded-md border border-border bg-card p-5">
           <div className="flex items-center justify-between mb-3">
             <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
@@ -176,7 +173,6 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
           </p>
         </div>
 
-        {/* AI Summary */}
         {summaryLoading && (
           <div className="mb-8 rounded-md border border-border bg-card p-5">
             <div className="h-3 w-32 bg-muted rounded animate-pulse mb-3" />
@@ -197,7 +193,6 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
           </div>
         )}
 
-        {/* Recommendations */}
         {output.results.length > 0 && (
           <div className="mb-10">
             <h2 className="text-[11px] font-medium text-muted-foreground uppercase tracking-[0.1em] mb-4">
@@ -244,7 +239,6 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
           </div>
         )}
 
-        {/* No recommendations state */}
         {!hasSavings && !output.spendingWell && (
           <div className="mb-10 rounded-md border border-border bg-card p-6 text-center">
             <p className="text-sm text-muted-foreground">
@@ -254,11 +248,9 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
           </div>
         )}
 
-        {/* Dynamic CTA and Forms */}
         <div className="mb-10 space-y-6">
           {!showBuyForm && !showSellForm && (
             <>
-              {/* Contextual CTA Cards - Both Buy and Sell always available */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="rounded-md border border-emerald-200 bg-emerald-50/60 p-5 flex flex-col justify-between h-full">
                   <div>
@@ -296,12 +288,10 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
                 </div>
               </div>
 
-              {/* Standard Lead capture */}
               <LeadCaptureForm auditId={auditId} hasSavings={hasSavings} />
             </>
           )}
 
-          {/* Credex Lead Forms (rendered when toggled) */}
           {showBuyForm && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
               <div className="mb-4">
@@ -325,7 +315,6 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
           )}
         </div>
 
-        {/* Trust footer */}
         <div className="mb-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[10px] text-muted-foreground">
           <span>Pricing verified from official vendor pages</span>
           <span className="hidden sm:inline">·</span>
@@ -334,7 +323,6 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
           <span>Deterministic audit rules</span>
         </div>
 
-        {/* Share / ID footer */}
         <div className="border-t border-border pt-5">
           <div className="flex items-center justify-between">
             <p className="text-[11px] text-muted-foreground tabular-nums">

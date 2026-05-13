@@ -27,7 +27,7 @@ describe("auditEngine", () => {
 
     expect(output.results).toHaveLength(1);
     expect(output.results[0].recommendedAction).toContain("Downgrade");
-    expect(output.results[0].savings).toBe(20); // $40 - $20
+    expect(output.results[0].savings).toBe(20);
   });
 
   it("recommends dropping one tool when Cursor Pro + Copilot Individual are both active for coding", () => {
@@ -89,7 +89,7 @@ describe("auditEngine", () => {
 
     expect(output.results).toHaveLength(1);
     expect(output.results[0].recommendedAction).toContain("Buy discounted");
-    expect(output.results[0].savings).toBe(45); // 45% of 100
+    expect(output.results[0].savings).toBe(45);
   });
 
   it("recommends discounted credits when Anthropic API is used", () => {
@@ -101,7 +101,7 @@ describe("auditEngine", () => {
 
     expect(output.results).toHaveLength(1);
     expect(output.results[0].recommendedAction).toContain("Buy discounted");
-    expect(output.results[0].savings).toBe(45); // 45% of 100
+    expect(output.results[0].savings).toBe(45);
   });
 
   it("recommends Gemini Pro when Ultra is used for writing", () => {
