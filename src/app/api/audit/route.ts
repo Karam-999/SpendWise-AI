@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { nanoid } from "nanoid";
-import { auditEngine } from "@/lib/auditEngine";
+import { auditEngine, PRICING } from "@/lib/auditEngine";
 import { getSupabase } from "@/lib/supabase";
 import type { AuditFormData, AuditResponse } from "@/lib/types";
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -38,14 +38,27 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = getSupabase();
     if (supabase) {
+      // Try with pricing_snapshot (requires Round 2 migration)
       const { error } = await supabase.from("audits").insert({
         id: auditId,
         tools_json: body,
         results_json: output,
         total_savings: output.totalMonthlySavings,
+        pricing_snapshot: PRICING,
       });
       if (error) {
-        console.error("Supabase insert error:", error);
+        // Fallback: insert without pricing_snapshot if column doesn't exist yet
+        if (error.message?.includes("pricing_snapshot")) {
+          const { error: fallbackError } = await supabase.from("audits").insert({
+            id: auditId,
+            tools_json: body,
+            results_json: output,
+            total_savings: output.totalMonthlySavings,
+          });
+          if (fallbackError) console.error("Supabase insert error:", fallbackError);
+        } else {
+          console.error("Supabase insert error:", error);
+        }
       }
     }
   } catch (err) {

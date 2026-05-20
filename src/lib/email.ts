@@ -102,3 +102,70 @@ export async function notifyAdminOfMarketplaceLead(
     return false;
   }
 }
+
+export async function sendPricingChangeEmail(
+  email: string,
+  affectedAudits: {
+    auditId: string;
+    changes: { tool: string; plan: string; oldPrice: number; newPrice: number }[];
+    oldSavings: number;
+    newSavings: number;
+  }[]
+): Promise<boolean> {
+  const resend = getResend();
+  if (!resend) {
+    console.warn("RESEND_API_KEY not set — skipping pricing change email.");
+    return false;
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  // Build change summary
+  const allChanges = affectedAudits.flatMap((a) => a.changes);
+  const uniqueChanges = Array.from(
+    new Map(allChanges.map((c) => [`${c.tool}-${c.plan}`, c])).values()
+  );
+
+  const changeLines = uniqueChanges.map(
+    (c) => `  • ${c.tool} (${c.plan}): $${c.oldPrice}/mo → $${c.newPrice}/mo`
+  );
+
+  const auditLines = affectedAudits.map((a) => {
+    const delta = a.newSavings - a.oldSavings;
+    const deltaStr = delta >= 0 ? `+$${delta}` : `-$${Math.abs(delta)}`;
+    return [
+      `  Audit ${a.auditId}:`,
+      `    Previous savings: $${a.oldSavings}/mo`,
+      `    Updated savings: $${a.newSavings}/mo (${deltaStr}/mo)`,
+      `    Re-run your audit: ${baseUrl}/audit/${a.auditId}/reaudit`,
+    ].join("\n");
+  });
+
+  const text = [
+    `Pricing has changed for tools in your AI stack.`,
+    ``,
+    `What changed:`,
+    ...changeLines,
+    ``,
+    `How this affects your audit${affectedAudits.length > 1 ? "s" : ""}:`,
+    ...auditLines,
+    ``,
+    `Click the link above to see a side-by-side comparison of your old and new audit results.`,
+    ``,
+    `— SpendWise`,
+  ].join("\n");
+
+  try {
+    await resend.emails.send({
+      from: "SpendWise <onboarding@resend.dev>",
+      to: email,
+      subject: `AI tool pricing changed — your audit has been updated`,
+      text,
+    });
+    return true;
+  } catch (err) {
+    console.error("Resend pricing change email failed:", err);
+    return false;
+  }
+}
+

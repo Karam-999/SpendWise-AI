@@ -1,6 +1,6 @@
 import type { AuditFormData, AuditOutput, ToolInput, ToolResult } from "./types";
 
-const PRICING = {
+export const PRICING = {
   cursor: {
     hobby: 0,
     pro: 20,
@@ -40,6 +40,8 @@ const PRICING = {
   },
 } as const;
 
+export type PricingData = typeof PRICING;
+
 const CONSULTATION_THRESHOLD = 500;
 const WELL_OPTIMISED_THRESHOLD = 100;
 
@@ -63,6 +65,16 @@ function evaluateTool(
   useCase: string,
   allTools: ToolInput[]
 ): ToolResult | null {
+  return evaluateToolWithPricing(tool, teamSize, useCase, allTools, PRICING);
+}
+
+function evaluateToolWithPricing(
+  tool: ToolInput,
+  teamSize: number,
+  useCase: string,
+  allTools: ToolInput[],
+  pricing: PricingData
+): ToolResult | null {
   if (!tool.active || seats(tool) === 0 || tool.monthlySpend === 0) {
     return null;
   }
@@ -75,7 +87,7 @@ function evaluateTool(
   };
 
   if (tool.tool === "cursor" && tool.plan === "teams" && seats(tool) <= 2) {
-    const newSpend = seats(tool) * PRICING.cursor.pro;
+    const newSpend = seats(tool) * pricing.cursor.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -88,7 +100,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "claude" && tool.plan === "team" && seats(tool) <= 2) {
-    const newSpend = seats(tool) * PRICING.claude.pro;
+    const newSpend = seats(tool) * pricing.claude.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -105,7 +117,7 @@ function evaluateTool(
     (tool.plan === "team" || tool.plan === "business") &&
     seats(tool) <= 2
   ) {
-    const newSpend = seats(tool) * PRICING.chatgpt.plus;
+    const newSpend = seats(tool) * pricing.chatgpt.plus;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -118,7 +130,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "github_copilot" && tool.plan === "enterprise" && seats(tool) <= 2) {
-    const newSpend = seats(tool) * PRICING.github_copilot.business;
+    const newSpend = seats(tool) * pricing.github_copilot.business;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -131,7 +143,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "windsurf" && tool.plan === "teams" && seats(tool) <= 2) {
-    const newSpend = seats(tool) * PRICING.windsurf.pro;
+    const newSpend = seats(tool) * pricing.windsurf.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -144,7 +156,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "github_copilot" && tool.plan === "enterprise" && teamSize <= 10) {
-    const newSpend = seats(tool) * PRICING.github_copilot.business;
+    const newSpend = seats(tool) * pricing.github_copilot.business;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -161,7 +173,7 @@ function evaluateTool(
     tool.plan === "ultra" &&
     (useCase === "writing" || useCase === "research")
   ) {
-    const newSpend = PRICING.gemini.pro;
+    const newSpend = pricing.gemini.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -175,7 +187,7 @@ function evaluateTool(
 
   if (tool.tool === "openai_api") {
     if (tool.monthlySpend > 0 && tool.monthlySpend < 20) {
-      const newSpend = PRICING.chatgpt.plus;
+      const newSpend = pricing.chatgpt.plus;
       const savings  = tool.monthlySpend - newSpend;
       if (savings >= 0) {
         return {
@@ -206,7 +218,7 @@ function evaluateTool(
 
   if (tool.tool === "anthropic_api") {
     if (tool.monthlySpend > 0 && tool.monthlySpend < 20) {
-      const newSpend = PRICING.claude.pro;
+      const newSpend = pricing.claude.pro;
       const savings  = tool.monthlySpend - newSpend;
       if (savings >= 0) {
         return {
@@ -290,7 +302,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "chatgpt" && tool.plan === "pro") {
-    const newSpend = PRICING.chatgpt.plus;
+    const newSpend = pricing.chatgpt.plus;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -303,7 +315,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "claude" && tool.plan === "max") {
-    const newSpend = PRICING.claude.pro;
+    const newSpend = pricing.claude.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -316,7 +328,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "cursor" && tool.plan === "ultra") {
-    const newSpend = PRICING.cursor.pro;
+    const newSpend = pricing.cursor.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -329,7 +341,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "cursor" && tool.plan === "pro_plus") {
-    const newSpend = PRICING.cursor.pro;
+    const newSpend = pricing.cursor.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -342,7 +354,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "windsurf" && tool.plan === "max") {
-    const newSpend = PRICING.windsurf.pro;
+    const newSpend = pricing.windsurf.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -355,7 +367,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "github_copilot" && tool.plan === "pro_plus" && seats(tool) === 1) {
-    const newSpend = PRICING.github_copilot.pro;
+    const newSpend = pricing.github_copilot.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -410,6 +422,10 @@ function buildSummaryHints(
 }
 
 export function auditEngine(input: AuditFormData): AuditOutput {
+  return auditEngineWithPricing(input, PRICING);
+}
+
+export function auditEngineWithPricing(input: AuditFormData, pricing: PricingData): AuditOutput {
   const activeTools = input.tools.filter(
     (t) => t.active && seats(t) > 0 && t.monthlySpend > 0
   );
@@ -417,7 +433,7 @@ export function auditEngine(input: AuditFormData): AuditOutput {
   const results: ToolResult[] = [];
 
   for (const tool of activeTools) {
-    const result = evaluateTool(tool, input.teamSize, input.useCase, input.tools);
+    const result = evaluateToolWithPricing(tool, input.teamSize, input.useCase, input.tools, pricing);
     if (result) {
       results.push(result);
     }
