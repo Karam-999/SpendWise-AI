@@ -10,7 +10,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   return {
-    title: "Re-audit Comparison — SpendWise",
+    title: "Re-audit Comparison - SpendWise",
     description: "See how pricing changes affect your AI spend audit results.",
   };
 }

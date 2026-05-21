@@ -17,7 +17,7 @@ export async function sendAuditEmail(
 ): Promise<boolean> {
   const resend = getResend();
   if (!resend) {
-    console.warn("RESEND_API_KEY not set — skipping email.");
+    console.warn("RESEND_API_KEY not set - skipping email.");
     return false;
   }
 
@@ -33,7 +33,7 @@ export async function sendAuditEmail(
     ``,
     totalSavings > 0
       ? `We found $${totalSavings}/mo in potential savings ($${totalSavings * 12}/yr).`
-      : `Your AI stack looks well-optimized — no significant savings found.`,
+      : `Your AI stack looks well-optimized - no significant savings found.`,
     ``,
     highSavings
       ? `With over $500/mo in savings potential, a SpendWise advisor will reach out within 24 hours to help you capture these savings through discounted AI credits.`
@@ -74,7 +74,7 @@ export async function notifyAdminOfMarketplaceLead(
 ): Promise<boolean> {
   const resend = getResend();
   if (!resend) {
-    console.warn("RESEND_API_KEY not set — skipping admin email.");
+    console.warn("RESEND_API_KEY not set - skipping admin email.");
     return false;
   }
 
@@ -114,7 +114,7 @@ export async function sendPricingChangeEmail(
 ): Promise<boolean> {
   const resend = getResend();
   if (!resend) {
-    console.warn("RESEND_API_KEY not set — skipping pricing change email.");
+    console.warn("RESEND_API_KEY not set - skipping pricing change email.");
     return false;
   }
 
@@ -159,7 +159,7 @@ export async function sendPricingChangeEmail(
     await resend.emails.send({
       from: "SpendWise <onboarding@resend.dev>",
       to: email,
-      subject: `AI tool pricing changed — your audit has been updated`,
+      subject: `AI tool pricing changed - your audit has been updated`,
       text,
     });
     return true;

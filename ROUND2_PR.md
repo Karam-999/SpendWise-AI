@@ -1,10 +1,19 @@
 ## What this PR does
 
-Adds a "re-audit on pricing change" system to SpendWise. Audits are now stored with a snapshot of the pricing data used at the time. When AI tool pricing changes, a detection endpoint identifies affected audits, emails users with what changed and how it impacts their recommendations, and provides a one-click link to a side-by-side diff view comparing old and new audit results.
+Adds a re-audit system to SpendWise that detects AI pricing changes and notifies affected users by email. Audits are now stored with the pricing snapshot used at the time, and users can re-run old audits to compare previous recommendations against updated ones side-by-side.
+
+The goal was to turn the audit from a one-time calculator into something that stays useful even when AI tool pricing changes.
 
 ## Why
 
-AI tool pricing changes frequently — Cursor raised prices in 2024, Claude added new tiers in 2025, Copilot restructured plans. A one-time audit becomes stale quickly, and stale advice is worse than no advice. This feature turns SpendWise from a one-shot calculator into a persistent monitoring tool. Users who've completed an audit now have a reason to come back, and the email notifications create a re-engagement channel that doesn't require the user to remember to check.
+AI tool pricing changes constantly. A recommendation that was valid last month can become outdated after a pricing update or plan restructure.
+
+I assumed users mainly care about two things:
+
+- Whether they are overspending today
+- Whether previous savings recommendations are still valid
+
+Instead of making users manually revisit the site, the system proactively detects affected audits and emails users only when their recommendations materially change.
 
 ## How it works
 
@@ -22,24 +31,24 @@ When a pricing change happens, `POST /api/detect-changes` is called (manually or
 The re-audit diff view at `/audit/[id]/reaudit` is a server component that fetches the original audit, re-runs it with current pricing, and renders a side-by-side comparison client component showing changed/added/removed recommendations with a savings delta headline.
 
 **New files:**
-- `src/lib/pricingDiff.ts` — pricing comparison utilities
-- `src/app/api/detect-changes/route.ts` — detection + notification endpoint
-- `src/app/audit/[id]/reaudit/page.tsx` + `client.tsx` — diff view
-- `supabase/migration_round2.sql` — schema changes
+- `src/lib/pricingDiff.ts` - pricing comparison utilities
+- `src/app/api/detect-changes/route.ts` - detection + notification endpoint
+- `src/app/audit/[id]/reaudit/page.tsx` + `client.tsx` - diff view
+- `supabase/migration_round2.sql` - schema changes
 
 **Modified files:**
-- `src/lib/auditEngine.ts` — exported PRICING, added `auditEngineWithPricing()`
-- `src/lib/email.ts` — added `sendPricingChangeEmail()`
-- `src/app/api/audit/route.ts` — stores pricing_snapshot
-- `src/app/api/leads/route.ts` — links email to audit row
+- `src/lib/auditEngine.ts` - exported PRICING, added `auditEngineWithPricing()`
+- `src/lib/email.ts` - added `sendPricingChangeEmail()`
+- `src/app/api/audit/route.ts` - stores pricing_snapshot
+- `src/app/api/leads/route.ts` - links email to audit row
 
 ## What I cut
 
-- **One-click unsubscribe** — the value/effort ratio in 36h favored getting the diff view right. Would add an `unsubscribed` boolean on the audits table and filter in detect-changes.
-- **Public pricing changelog page** — interesting growth surface but zero impact on the core re-audit flow. Would be a static page fed by the `reaudit_notifications` table.
-- **Admin dashboard** — would show total audits, emails sent, click-through. Deferred because the data is already in Supabase and queryable via SQL.
-- **Scheduled cron trigger** — used a manual endpoint instead. Vercel Cron requires Pro; a GitHub Actions schedule calling the endpoint would work but adds CI complexity for no functional benefit during review.
-- **HTML email templates** — sent plain text emails. A styled HTML email with pricing diff tables would be more polished but takes 2+ hours to get right across email clients.
+- **One-click unsubscribe** - the value/effort ratio in 36h favored getting the diff view right. Would add an `unsubscribed` boolean on the audits table and filter in detect-changes.
+- **Public pricing changelog page** - interesting growth surface but zero impact on the core re-audit flow. Would be a static page fed by the `reaudit_notifications` table.
+- **Admin dashboard** - would show total audits, emails sent, click-through. Deferred because the data is already in Supabase and queryable via SQL.
+- **Scheduled cron trigger** - used a manual endpoint instead. Vercel Cron requires Pro; a GitHub Actions schedule calling the endpoint would work but adds CI complexity for no functional benefit during review.
+- **HTML email templates** - sent plain text emails. A styled HTML email with pricing diff tables would be more polished but takes 2+ hours to get right across email clients.
 
 ## How to test it manually
 
@@ -58,8 +67,8 @@ The re-audit diff view at `/audit/[id]/reaudit` is a server component that fetch
 
 ## What's tested
 
-- `src/tests/auditEngine.test.ts` — 9 tests for audit engine rules (existing, all pass)
-- `src/tests/pricingDiff.test.ts` — 6 new tests:
+- `src/tests/auditEngine.test.ts` - 9 tests for audit engine rules (existing, all pass)
+- `src/tests/pricingDiff.test.ts` - 6 new tests:
   - Detects no changes when pricing is identical
   - Detects price increases
   - Detects price decreases

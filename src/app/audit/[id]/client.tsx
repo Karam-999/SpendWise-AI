@@ -173,7 +173,7 @@ export default function AuditResultClient({ auditId, serverOutput }: Props) {
             />
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            {scoreLabel(output.spendScore)} — {output.spendScore >= 85
+            {scoreLabel(output.spendScore)} - {output.spendScore >= 85
               ? "your spend is well-optimized"
               : output.spendScore >= 60
               ? "some optimization opportunities exist"

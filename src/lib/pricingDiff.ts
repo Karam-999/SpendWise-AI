@@ -7,9 +7,7 @@ export interface PriceChange {
   newPrice: number;
 }
 
-/**
- * Compare two pricing snapshots and return all differences.
- */
+
 export function detectPricingChanges(
   oldPricing: PricingData,
   newPricing: PricingData
@@ -43,9 +41,7 @@ export function detectPricingChanges(
   return changes;
 }
 
-/**
- * Quick check: did anything change between two pricing snapshots?
- */
+
 export function hasRelevantChanges(
   oldPricing: PricingData,
   newPricing: PricingData
@@ -53,10 +49,7 @@ export function hasRelevantChanges(
   return detectPricingChanges(oldPricing, newPricing).length > 0;
 }
 
-/**
- * Deep merge pricing overrides into the base pricing.
- * Only merges the specific plans that are overridden.
- */
+
 export function mergePricingOverrides(
   basePricing: PricingData,
   overrides: Record<string, Record<string, number>>

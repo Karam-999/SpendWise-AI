@@ -6,17 +6,7 @@ import type { AuditFormData } from "@/lib/types";
 import { detectPricingChanges, mergePricingOverrides } from "@/lib/pricingDiff";
 import { sendPricingChangeEmail } from "@/lib/email";
 
-/**
- * POST /api/detect-changes
- *
- * Detects which stored audits are affected by pricing changes and emails users.
- *
- * Body (optional):
- *   { "pricing_overrides": { "cursor": { "pro": 25 } } }
- *
- * If no body is provided, compares stored snapshots against current PRICING.
- * If pricing_overrides is provided, merges them with current PRICING first.
- */
+
 export async function POST(request: NextRequest) {
   const supabase = getSupabase();
   if (!supabase) {

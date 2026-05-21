@@ -181,7 +181,7 @@ export default function ReauditDiffClient({ auditId, oldOutput, newOutput, prici
           </div>
         )}
 
-        {/* Diff Rows — Changed */}
+        {/* Diff Rows - Changed */}
         {changedRows.length > 0 && (
           <div className="mb-8">
             <h2 className="text-[11px] font-medium text-neutral-500 uppercase tracking-[0.1em] mb-4">
@@ -234,7 +234,7 @@ export default function ReauditDiffClient({ auditId, oldOutput, newOutput, prici
           </div>
         )}
 
-        {/* Unchanged Rows — Collapsed */}
+        {/* Unchanged Rows - Collapsed */}
         {unchangedRows.length > 0 && (
           <div className="mb-8">
             <details className="group">

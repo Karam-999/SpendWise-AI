@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { detectPricingChanges, hasRelevantChanges, mergePricingOverrides } from "@/lib/pricingDiff";
 import { PRICING, auditEngineWithPricing, auditEngine } from "@/lib/auditEngine";
-// import type { PricingData } from "@/lib/auditEngine";
+
 import type { AuditFormData, ToolInput, ToolName } from "@/lib/types";
 
 function makeTool(overrides: Partial<ToolInput> & { tool: ToolName }): ToolInput {
