@@ -39,7 +39,7 @@ export async function sendAuditEmail(
       ? `With over $500/mo in savings potential, a SpendWise advisor will reach out within 24 hours to help you capture these savings through discounted AI credits.`
       : ``,
     ``,
-    `—SpendWise\n Karam`,
+  `-SpendWise\n ${' '}Karam`,
   ]
     .filter(Boolean)
     .join("\n");
@@ -120,7 +120,7 @@ export async function sendPricingChangeEmail(
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
-  // Build change summary
+
   const allChanges = affectedAudits.flatMap((a) => a.changes);
   const uniqueChanges = Array.from(
     new Map(allChanges.map((c) => [`${c.tool}-${c.plan}`, c])).values()
@@ -152,7 +152,7 @@ export async function sendPricingChangeEmail(
     ``,
     `Click the link above to see a side-by-side comparison of your old and new audit results.`,
     ``,
-    `— SpendWise`,
+    `- SpendWise`,
   ].join("\n");
 
   try {

@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Database not configured." }, { status: 500 });
   }
 
-  // Parse optional pricing overrides
+
   let effectivePricing: PricingData = PRICING;
   try {
     const body = await request.json();
@@ -31,10 +31,10 @@ export async function POST(request: NextRequest) {
       effectivePricing = mergePricingOverrides(PRICING, body.pricing_overrides);
     }
   } catch {
-    // No body or invalid JSON — use current PRICING as-is
+
   }
 
-  // Fetch all audits that have an email and a pricing snapshot
+
   const { data: audits, error } = await supabase
     .from("audits")
     .select("id, email, tools_json, results_json, pricing_snapshot, total_savings")
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  // Find affected audits
+
   interface AffectedAudit {
     auditId: string;
     email: string;
@@ -73,13 +73,13 @@ export async function POST(request: NextRequest) {
 
     if (changes.length === 0) continue;
 
-    // Re-run the audit with new pricing
+
     const toolsInput = audit.tools_json as AuditFormData;
     const newOutput = auditEngineWithPricing(toolsInput, effectivePricing);
     const oldSavings = audit.total_savings as number;
     const newSavings = newOutput.totalMonthlySavings;
 
-    // Check if recommendations actually changed
+
     const oldRecs = (audit.results_json as { results: { recommendedAction: string }[] })
       .results.map((r) => r.recommendedAction);
     const newRecs = newOutput.results.map((r) => r.recommendedAction);
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  // Group by email for consolidated notifications
+
   const byEmail = new Map<string, AffectedAudit[]>();
   for (const audit of affectedAudits) {
     const existing = byEmail.get(audit.email) ?? [];
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
     if (sent) emailsSent++;
     emailResults.push({ email, auditsAffected: audits.length, sent });
 
-    // Log the notification
+
     try {
       await supabase.from("reaudit_notifications").insert({
         email,
@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // Update the pricing snapshot on affected audits to the new pricing
+
   for (const audit of affectedAudits) {
     try {
       await supabase

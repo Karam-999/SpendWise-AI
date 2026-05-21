@@ -68,7 +68,7 @@ function buildDiffRows(oldResults: ToolResult[], newResults: ToolResult[]): Diff
     });
   }
 
-  // Sort: changed first, then added, then removed, then unchanged
+
   const order: Record<DiffStatus, number> = { changed: 0, added: 1, removed: 2, unchanged: 3 };
   rows.sort((a, b) => order[a.status] - order[b.status]);
   return rows;

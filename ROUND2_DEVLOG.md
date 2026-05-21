@@ -48,3 +48,6 @@ Wrote migration SQL (`supabase/migration_round2.sql`). Need to run on live Supab
 
 ## 20-05-2026 23:30 — Documentation
 Writing ROUND2_PR.md, ROUND2_DEVLOG.md, ROUND2_REFLECTION.md.
+
+## 21-05-2026 23:42 — Fixed small errors
+Fixed the supabase errors and pushed the changes to the repository.

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = getSupabase();
     if (supabase) {
-      // Try with pricing_snapshot (requires Round 2 migration)
+
       const { error } = await supabase.from("audits").insert({
         id: auditId,
         tools_json: body,
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         pricing_snapshot: PRICING,
       });
       if (error) {
-        // Fallback: insert without pricing_snapshot if column doesn't exist yet
+
         if (error.message?.includes("pricing_snapshot")) {
           const { error: fallbackError } = await supabase.from("audits").insert({
             id: auditId,

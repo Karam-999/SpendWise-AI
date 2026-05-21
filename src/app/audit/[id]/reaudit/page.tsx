@@ -23,7 +23,7 @@ export default async function ReauditPage({ params }: PageProps) {
     return <ReauditDiffClient auditId={id} oldOutput={null} newOutput={null} pricingChanges={[]} />;
   }
 
-  // Fetch the original audit
+
   const { data } = await supabase
     .from("audits")
     .select("tools_json, results_json, pricing_snapshot")
@@ -37,10 +37,10 @@ export default async function ReauditPage({ params }: PageProps) {
   const oldOutput = data.results_json as AuditOutput;
   const toolsInput = data.tools_json as AuditFormData;
 
-  // Re-run audit with current pricing
+
   const newOutput = auditEngine(toolsInput);
 
-  // Detect what pricing changed
+
   const oldPricing = (data.pricing_snapshot ?? PRICING) as Record<string, Record<string, number>>;
   const newPricing = PRICING as unknown as Record<string, Record<string, number>>;
 

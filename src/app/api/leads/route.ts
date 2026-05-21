@@ -23,33 +23,27 @@ export async function POST(request: NextRequest) {
   const supabase = getSupabase();
 
   if (supabase) {
-    try {
-      const { data: audit } = await supabase
-        .from("audits")
-        .select("total_savings")
-        .eq("id", body.auditId)
-        .single();
+    const { data: audit } = await supabase
+      .from("audits")
+      .select("total_savings")
+      .eq("id", body.auditId)
+      .maybeSingle();
 
-      totalSavings = audit?.total_savings ?? 0;
+    totalSavings = audit?.total_savings ?? 0;
 
-      const { error: leadError } = await supabase.from("leads").insert({
-        audit_id: body.auditId,
-        email: body.email,
-        company: body.company || null,
-        role: body.role || null,
-        team_size: null,
-      });
-      if (leadError) console.error("Lead insert error:", leadError);
+    const { error: leadError } = await supabase.from("leads").insert({
+      audit_id: body.auditId,
+      email: body.email,
+      company: body.company || null,
+      role: body.role || null,
+    });
+    if (leadError) console.error("Lead insert error:", leadError);
 
-      // Link email to audit for re-audit notifications
-      const { error: updateError } = await supabase
-        .from("audits")
-        .update({ email: body.email })
-        .eq("id", body.auditId);
-      if (updateError) console.error("Audit email update error:", updateError);
-    } catch (err) {
-      console.error("Failed to save lead:", err);
-    }
+    const { error: updateError } = await supabase
+      .from("audits")
+      .update({ email: body.email })
+      .eq("id", body.auditId);
+    if (updateError) console.error("Audit email update error:", updateError);
   }
 
   await sendAuditEmail(body.email, body.auditId, totalSavings);

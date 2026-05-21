@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS leads (
   email       TEXT NOT NULL,
   company     TEXT,
   role        TEXT,
-  team_size   INTEGER,
   created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 CREATE INDEX IF NOT EXISTS idx_leads_audit_id ON leads(audit_id);

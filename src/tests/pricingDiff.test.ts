@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { detectPricingChanges, hasRelevantChanges, mergePricingOverrides } from "@/lib/pricingDiff";
 import { PRICING, auditEngineWithPricing, auditEngine } from "@/lib/auditEngine";
-import type { PricingData } from "@/lib/auditEngine";
+// import type { PricingData } from "@/lib/auditEngine";
 import type { AuditFormData, ToolInput, ToolName } from "@/lib/types";
 
 function makeTool(overrides: Partial<ToolInput> & { tool: ToolName }): ToolInput {
@@ -46,7 +46,7 @@ describe("pricingDiff", () => {
   it("merges pricing overrides correctly", () => {
     const merged = mergePricingOverrides(PRICING, { cursor: { pro: 30 } });
     expect((merged as unknown as Record<string, Record<string, number>>).cursor.pro).toBe(30);
-    // Other prices should remain unchanged
+
     expect((merged as unknown as Record<string, Record<string, number>>).cursor.ultra).toBe(200);
     expect((merged as unknown as Record<string, Record<string, number>>).claude.pro).toBe(20);
   });
@@ -61,10 +61,10 @@ describe("auditEngineWithPricing", () => {
     };
 
     const outputDefault = auditEngineWithPricing(form, PRICING);
-    // Default: teams at $40, pro at $20, savings = $20
+
     expect(outputDefault.results[0].savings).toBe(20);
 
-    // Increase pro price to $30 → savings should be $10
+
     const newPricing = mergePricingOverrides(PRICING, { cursor: { pro: 30 } });
     const outputNew = auditEngineWithPricing(form, newPricing);
     expect(outputNew.results[0].savings).toBe(10);
