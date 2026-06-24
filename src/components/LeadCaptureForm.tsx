@@ -66,7 +66,7 @@ export default function LeadCaptureForm({ auditId, hasSavings = true }: LeadCapt
       <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
         {hasSavings
           ? "We\u0027ll send a summary with your results and a permanent link to this report."
-          : "We\u0027ll notify you when new savings apply to your stack — no spam, just relevant updates."}
+          : "We\u0027ll notify you when new savings apply to your stack - no spam, just relevant updates."}
       </p>
       <div className="flex flex-col gap-2.5">
         <input

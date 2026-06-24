@@ -1,6 +1,6 @@
 import type { AuditFormData, AuditOutput, ToolInput, ToolResult } from "./types";
 
-const PRICING = {
+export const PRICING = {
   cursor: {
     hobby: 0,
     pro: 20,
@@ -40,6 +40,8 @@ const PRICING = {
   },
 } as const;
 
+export type PricingData = typeof PRICING;
+
 const CONSULTATION_THRESHOLD = 500;
 const WELL_OPTIMISED_THRESHOLD = 100;
 
@@ -63,6 +65,16 @@ function evaluateTool(
   useCase: string,
   allTools: ToolInput[]
 ): ToolResult | null {
+  return evaluateToolWithPricing(tool, teamSize, useCase, allTools, PRICING);
+}
+
+function evaluateToolWithPricing(
+  tool: ToolInput,
+  teamSize: number,
+  useCase: string,
+  allTools: ToolInput[],
+  pricing: PricingData
+): ToolResult | null {
   if (!tool.active || seats(tool) === 0 || tool.monthlySpend === 0) {
     return null;
   }
@@ -75,7 +87,7 @@ function evaluateTool(
   };
 
   if (tool.tool === "cursor" && tool.plan === "teams" && seats(tool) <= 2) {
-    const newSpend = seats(tool) * PRICING.cursor.pro;
+    const newSpend = seats(tool) * pricing.cursor.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -88,7 +100,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "claude" && tool.plan === "team" && seats(tool) <= 2) {
-    const newSpend = seats(tool) * PRICING.claude.pro;
+    const newSpend = seats(tool) * pricing.claude.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -105,7 +117,7 @@ function evaluateTool(
     (tool.plan === "team" || tool.plan === "business") &&
     seats(tool) <= 2
   ) {
-    const newSpend = seats(tool) * PRICING.chatgpt.plus;
+    const newSpend = seats(tool) * pricing.chatgpt.plus;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -113,12 +125,12 @@ function evaluateTool(
       newSpend,
       savings,
       priority: toPriority(savings),
-      reason: `Business plan ($25/user/mo) for ${seats(tool)} user${seats(tool) > 1 ? "s" : ""} is wasteful — team admin features aren't useful at this size. Plus at $20/mo gives identical model access.`,
+      reason: `Business plan ($25/user/mo) for ${seats(tool)} user${seats(tool) > 1 ? "s" : ""} is wasteful - team admin features aren't useful at this size. Plus at $20/mo gives identical model access.`,
     };
   }
 
   if (tool.tool === "github_copilot" && tool.plan === "enterprise" && seats(tool) <= 2) {
-    const newSpend = seats(tool) * PRICING.github_copilot.business;
+    const newSpend = seats(tool) * pricing.github_copilot.business;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -131,7 +143,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "windsurf" && tool.plan === "teams" && seats(tool) <= 2) {
-    const newSpend = seats(tool) * PRICING.windsurf.pro;
+    const newSpend = seats(tool) * pricing.windsurf.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -139,12 +151,12 @@ function evaluateTool(
       newSpend,
       savings,
       priority: toPriority(savings),
-      reason: `Teams plan ($40/user/mo) for ${seats(tool)} seat${seats(tool) > 1 ? "s" : ""} — you're paying a per-seat premium for centralised billing that doesn't apply to a ${seats(tool)}-person setup. Pro at $20/mo covers individual quotas.`,
+      reason: `Teams plan ($40/user/mo) for ${seats(tool)} seat${seats(tool) > 1 ? "s" : ""} - you're paying a per-seat premium for centralised billing that doesn't apply to a ${seats(tool)}-person setup. Pro at $20/mo covers individual quotas.`,
     };
   }
 
   if (tool.tool === "github_copilot" && tool.plan === "enterprise" && teamSize <= 10) {
-    const newSpend = seats(tool) * PRICING.github_copilot.business;
+    const newSpend = seats(tool) * pricing.github_copilot.business;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -152,7 +164,7 @@ function evaluateTool(
       newSpend,
       savings,
       priority: toPriority(savings),
-      reason: `Copilot Enterprise ($39/user/mo) adds SSO, audit logs, and policy management — features that only matter at 50+ person orgs with dedicated IT. Business at $19/user/mo offers the same completions for a ${teamSize}-person team.`,
+      reason: `Copilot Enterprise ($39/user/mo) adds SSO, audit logs, and policy management - features that only matter at 50+ person orgs with dedicated IT. Business at $19/user/mo offers the same completions for a ${teamSize}-person team.`,
     };
   }
 
@@ -161,7 +173,7 @@ function evaluateTool(
     tool.plan === "ultra" &&
     (useCase === "writing" || useCase === "research")
   ) {
-    const newSpend = PRICING.gemini.pro;
+    const newSpend = pricing.gemini.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -175,7 +187,7 @@ function evaluateTool(
 
   if (tool.tool === "openai_api") {
     if (tool.monthlySpend > 0 && tool.monthlySpend < 20) {
-      const newSpend = PRICING.chatgpt.plus;
+      const newSpend = pricing.chatgpt.plus;
       const savings  = tool.monthlySpend - newSpend;
       if (savings >= 0) {
         return {
@@ -184,7 +196,7 @@ function evaluateTool(
           newSpend,
           savings,
           priority: toPriority(savings),
-          reason: `You're spending $${tool.monthlySpend}/mo on OpenAI API tokens — unpredictable billing for a low-volume use. ChatGPT Plus ($20/mo) gives unlimited access to GPT-4o and o4-mini with a polished UI and zero surprise invoices.`,
+          reason: `You're spending $${tool.monthlySpend}/mo on OpenAI API tokens - unpredictable billing for a low-volume use. ChatGPT Plus ($20/mo) gives unlimited access to GPT-4o and o4-mini with a polished UI and zero surprise invoices.`,
         };
       }
       return null;
@@ -199,14 +211,14 @@ function evaluateTool(
         newSpend,
         savings,
         priority: toPriority(savings),
-        reason: `At $${tool.monthlySpend}/mo you're a real API user — you can't substitute a chat plan. Unused OpenAI API credits from over-forecasted companies sell at ~45% off retail. No integration change required.`,
+        reason: `At $${tool.monthlySpend}/mo you're a real API user - you can't substitute a chat plan. Unused OpenAI API credits from over-forecasted companies sell at ~45% off retail. No integration change required.`,
       };
     }
   }
 
   if (tool.tool === "anthropic_api") {
     if (tool.monthlySpend > 0 && tool.monthlySpend < 20) {
-      const newSpend = PRICING.claude.pro;
+      const newSpend = pricing.claude.pro;
       const savings  = tool.monthlySpend - newSpend;
       if (savings >= 0) {
         return {
@@ -215,7 +227,7 @@ function evaluateTool(
           newSpend,
           savings,
           priority: toPriority(savings),
-          reason: `You're spending $${tool.monthlySpend}/mo on Anthropic API tokens — unpredictable for a low-volume use. Claude Pro ($20/mo flat) includes access to Claude Sonnet and Opus with no per-token billing.`,
+          reason: `You're spending $${tool.monthlySpend}/mo on Anthropic API tokens - unpredictable for a low-volume use. Claude Pro ($20/mo flat) includes access to Claude Sonnet and Opus with no per-token billing.`,
         };
       }
       return null;
@@ -230,7 +242,7 @@ function evaluateTool(
         newSpend,
         savings,
         priority: toPriority(savings),
-        reason: `At $${tool.monthlySpend}/mo you need the API — you can't swap in a chat interface. Discounted Anthropic API credits (sourced from companies that over-forecasted) cut this bill by ~45% with zero code changes.`,
+        reason: `At $${tool.monthlySpend}/mo you need the API - you can't swap in a chat interface. Discounted Anthropic API credits (sourced from companies that over-forecasted) cut this bill by ~45% with zero code changes.`,
       };
     }
   }
@@ -248,7 +260,7 @@ function evaluateTool(
         const topTool = sorted[0];
         return {
           ...base,
-          recommendedAction: `Drop ${tool.label} — consolidate on ${topTool.label}`,
+          recommendedAction: `Drop ${tool.label} - consolidate on ${topTool.label}`,
           newSpend: 0,
           savings: tool.monthlySpend,
           priority: toPriority(tool.monthlySpend),
@@ -279,18 +291,18 @@ function evaluateTool(
         const keepTool = activeChatTools.find((t) => t.tool !== toolToDrop);
         return {
           ...base,
-          recommendedAction: `Drop ${tool.label} — ${keepTool?.label ?? "the other chat tool"} covers your ${useCase} workflow`,
+          recommendedAction: `Drop ${tool.label} - ${keepTool?.label ?? "the other chat tool"} covers your ${useCase} workflow`,
           newSpend: 0,
           savings: tool.monthlySpend,
           priority: toPriority(tool.monthlySpend),
-          reason: `Both Claude and ChatGPT are active for a ${useCase} use case. Teams that audit their usage find one becomes the default within weeks. For ${useCase}, ${keepTool?.label ?? "the other tool"} is the stronger fit — cancelling ${tool.label} saves $${tool.monthlySpend}/mo with no real capability gap.`,
+          reason: `Both Claude and ChatGPT are active for a ${useCase} use case. Teams that audit their usage find one becomes the default within weeks. For ${useCase}, ${keepTool?.label ?? "the other tool"} is the stronger fit - cancelling ${tool.label} saves $${tool.monthlySpend}/mo with no real capability gap.`,
         };
       }
     }
   }
 
   if (tool.tool === "chatgpt" && tool.plan === "pro") {
-    const newSpend = PRICING.chatgpt.plus;
+    const newSpend = pricing.chatgpt.plus;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -298,12 +310,12 @@ function evaluateTool(
       newSpend,
       savings,
       priority: toPriority(savings),
-      reason: `ChatGPT Pro ($200/mo) adds unlimited o1 pro-mode and extended thinking — features designed for researchers running very long reasoning chains. ChatGPT Plus ($20/mo) covers GPT-4o and standard o4-mini for everyday ${useCase} tasks at 1/10 the price.`,
+      reason: `ChatGPT Pro ($200/mo) adds unlimited o1 pro-mode and extended thinking - features designed for researchers running very long reasoning chains. ChatGPT Plus ($20/mo) covers GPT-4o and standard o4-mini for everyday ${useCase} tasks at 1/10 the price.`,
     };
   }
 
   if (tool.tool === "claude" && tool.plan === "max") {
-    const newSpend = PRICING.claude.pro;
+    const newSpend = pricing.claude.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -316,7 +328,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "cursor" && tool.plan === "ultra") {
-    const newSpend = PRICING.cursor.pro;
+    const newSpend = pricing.cursor.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -324,12 +336,12 @@ function evaluateTool(
       newSpend,
       savings,
       priority: toPriority(savings),
-      reason: `Cursor Ultra ($200/mo) offers 20× the usage of Pro — designed for teams running Cursor agents unattended 24/7. For a single developer or a small team doing interactive coding, Pro at $20/mo covers daily usage without hitting limits.`,
+      reason: `Cursor Ultra ($200/mo) offers 20× the usage of Pro - designed for teams running Cursor agents unattended 24/7. For a single developer or a small team doing interactive coding, Pro at $20/mo covers daily usage without hitting limits.`,
     };
   }
 
   if (tool.tool === "cursor" && tool.plan === "pro_plus") {
-    const newSpend = PRICING.cursor.pro;
+    const newSpend = pricing.cursor.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -342,7 +354,7 @@ function evaluateTool(
   }
 
   if (tool.tool === "windsurf" && tool.plan === "max") {
-    const newSpend = PRICING.windsurf.pro;
+    const newSpend = pricing.windsurf.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -350,12 +362,12 @@ function evaluateTool(
       newSpend,
       savings,
       priority: toPriority(savings),
-      reason: `Windsurf Max ($200/mo) unlocks significantly higher prompt quotas — relevant only for teams running automated agentic pipelines. For interactive development, Windsurf Pro at $20/mo provides ample quota.`,
+      reason: `Windsurf Max ($200/mo) unlocks significantly higher prompt quotas - relevant only for teams running automated agentic pipelines. For interactive development, Windsurf Pro at $20/mo provides ample quota.`,
     };
   }
 
   if (tool.tool === "github_copilot" && tool.plan === "pro_plus" && seats(tool) === 1) {
-    const newSpend = PRICING.github_copilot.pro;
+    const newSpend = pricing.github_copilot.pro;
     const savings  = tool.monthlySpend - newSpend;
     return {
       ...base,
@@ -363,7 +375,7 @@ function evaluateTool(
       newSpend,
       savings,
       priority: toPriority(savings),
-      reason: `Copilot Pro+ ($39/mo) adds multi-model agents and extended context — useful primarily for developers actively using Copilot Workspace for autonomous tasks. Copilot Pro at $10/mo provides the core completions and chat that cover standard ${useCase} work.`,
+      reason: `Copilot Pro+ ($39/mo) adds multi-model agents and extended context - useful primarily for developers actively using Copilot Workspace for autonomous tasks. Copilot Pro at $10/mo provides the core completions and chat that cover standard ${useCase} work.`,
     };
   }
 
@@ -390,12 +402,12 @@ function buildSummaryHints(
 
   const highPriority = results.filter((r) => r.priority === "high");
   if (highPriority.length > 0) {
-    hints.push(`Highest-impact action: ${highPriority[0].recommendedAction} — saves $${highPriority[0].savings}/mo`);
+    hints.push(`Highest-impact action: ${highPriority[0].recommendedAction} - saves $${highPriority[0].savings}/mo`);
   }
 
   const apiResults = results.filter((r) => API_TOOLS.includes(r.tool));
   if (apiResults.length > 0) {
-    hints.push(`Raw API spend detected — direct credit purchase opportunity`);
+    hints.push(`Raw API spend detected - direct credit purchase opportunity`);
   }
 
   const redundantTools = results.filter((r) => r.newSpend === 0);
@@ -410,6 +422,10 @@ function buildSummaryHints(
 }
 
 export function auditEngine(input: AuditFormData): AuditOutput {
+  return auditEngineWithPricing(input, PRICING);
+}
+
+export function auditEngineWithPricing(input: AuditFormData, pricing: PricingData): AuditOutput {
   const activeTools = input.tools.filter(
     (t) => t.active && seats(t) > 0 && t.monthlySpend > 0
   );
@@ -417,7 +433,7 @@ export function auditEngine(input: AuditFormData): AuditOutput {
   const results: ToolResult[] = [];
 
   for (const tool of activeTools) {
-    const result = evaluateTool(tool, input.teamSize, input.useCase, input.tools);
+    const result = evaluateToolWithPricing(tool, input.teamSize, input.useCase, input.tools, pricing);
     if (result) {
       results.push(result);
     }

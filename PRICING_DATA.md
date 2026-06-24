@@ -96,4 +96,4 @@ OpenAI API and Anthropic API are usage-based (per-token). The audit engine flags
 
 ## What the audit engine uses
 
-The engine only uses the plans that are relevant for cost optimization rules. It doesn't model every plan — just the ones where a clear downgrade or consolidation saves money. See `src/lib/auditEngine.ts` for the exact pricing constants.
+The engine only uses the plans that are relevant for cost optimization rules. It doesn't model every plan - just the ones where a clear downgrade or consolidation saves money. See `src/lib/auditEngine.ts` for the exact pricing constants.

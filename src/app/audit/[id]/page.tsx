@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .single();
 
   if (!data) {
-    return { title: "Audit not found — AI Spend Audit" };
+    return { title: "Audit not found - AI Spend Audit" };
   }
 
   const output = data.results_json as AuditOutput;
@@ -30,18 +30,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const topRec = output.results[0];
   const description = topRec
-    ? `Top recommendation: ${topRec.recommendedAction} — saves $${topRec.savings}/mo`
+    ? `Top recommendation: ${topRec.recommendedAction} - saves $${topRec.savings}/mo`
     : "AI tool stack is well-optimized";
 
   return {
     title: savings > 0
       ? `I could save $${savings}/month on AI tools`
-      : "My AI stack is optimized — AI Spend Audit",
+      : "My AI stack is optimized - AI Spend Audit",
     description,
     openGraph: {
       title: savings > 0
-        ? `I could save $${savings}/month on AI tools — see my audit`
-        : "My AI stack is optimized — see my audit",
+        ? `I could save $${savings}/month on AI tools - see my audit`
+        : "My AI stack is optimized - see my audit",
       description,
       type: "website",
     },
